@@ -1,9 +1,9 @@
 # include <iostream>
 # include <vector>
 # include <math.h>
-# include <string>
-# include <cmath>
-# include <fstream>
+#include <string>
+#include <cmath>
+#include <fstream>
 using namespace std;
 
 double f(double x);
@@ -27,7 +27,6 @@ int main(){
 
 	}
 	myfile.close();
-
 
 	return 0;
 }
@@ -59,5 +58,5 @@ double derivert_mfeil(double x, double h){
 }
 
 double totalfeil(double x, double h){
-	return abs((1./3) - derivert_mfeil(x,h));
+	return (1./3) - derivert_mfeil(x,h);
 }
