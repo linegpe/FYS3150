@@ -6,7 +6,7 @@ using namespace std;
 
 // Exact solution we want to compare with
 double source_term(double x){
-    return 100*exp(-10*x);
+    return 1 - (1 - exp(-10))*x - exp(-10*x);
 }
 
 int main()
@@ -28,25 +28,27 @@ int main()
     cout << "So far so good" << endl;
     // Fill vectors with values
     for(int i = 0; i < n+2; i++){
-        a[i] = 2;
-        b[i] = -1;
+        a[i] = -1;
+        b[i] = 2;
         c[i] = -1;
         f[i] = h*h*source_term(i*h);
     }
     // Forward substitution
-    for(int i = 0; i < n+1; i++){
+    b_tilde[0] = b[0];
+    for(int i = 1; i < n+2; i++){
         b_tilde[i] = b[i] - (c[i-1]*a[i-1])/b_tilde[i-1];
         f_tilde1[i] = f[i] - (c[i-1]*a[i-1])/b_tilde[i-1];
     }
+    u[n+1] = f_tilde1[n+1]/b_tilde[n+1];
     // Backward substitution
-    for(int i = n+1; i > 0; i--){
-        c_tilde[i] = c[i] - c[i+1]/b_tilde[i+1];
-        f_tilde2[i] = f_tilde1[i] - c[i+1]/b_tilde[i+1];
+    for(int i = n; i > 0; i--){
+        //c_tilde[i] = c[i] - c[i+1]/b_tilde[i+1];
+        u[i] = (f_tilde1[i] - c[i]*u[i+1])/b[i];
+        //f_tilde2[i] = f_tilde1[i] - c[i+1]/b_tilde[i+1];
     }
     cout << "So far so good" << endl;
     // Then u is equal to f_tilde2
     for(int i = 0; i < n+2; i++){
-        u[i] = f_tilde2[i];
     }
     // Fillling x with values
     for(int i = 0; i < n+2; i++){
