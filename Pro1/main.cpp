@@ -71,13 +71,8 @@ int main()
     // First we must make the matrices (Previosly defined as vectors)
     //double A[n][n];
     mat A = zeros<mat>(n,n);
-    // Make all elements zero:
-    //for(int i = 0; i < n; i++){
-    //    for(int j = 0; i <n; i++){
-    //        A[i][j] = 0.0;
-    //    }
-   // }
-   // // Define elements along diagonal
+
+    // // Define elements along diagonal
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             if (i==j){
@@ -94,16 +89,34 @@ int main()
             }
         }
     }
-    //mat A = A;
     A.print("A=");
+    vec f_vec = zeros<vec>(n);
+    for (int i = 0; i< n; i++){
+        f_vec(i) = h*h*exact_solution(x[i]);
+    }
+    // Solve Av = f:
+    //vec v_vec = zeros<vec>(n);
+    //v_vec = solve(A,f_vec);
+    //v_vec.print("v=");
 
+    // LU decomposition
+    mat L,U;
+    lu(L,U,A);
+    L.print("L = ");
+    U.print("U = ");
 
-    // Write result to file 1 (General alorithm)
+    mat y_vec = solve(L,f_vec);
+    vec v_vec = solve(U,y_vec);
+
+    //v_vec(0) = 0;
+    //v_vec(n-1) = 0;
+
+    // Write result to file 1 (General alorithm) and LU v in last column
     ofstream myfile;
     cout << "We have openened a file!" << endl;
     myfile.open("res2.txt");
     for(int i = 0; i < n; i++){
-        myfile << i << " " << u[i] << " " << u_exact[i] << endl;
+        myfile << i << " " << u[i] << " " << u_exact[i] << " " << v_vec[i] << endl;
     }
     myfile.close();
     cout << "File closed, deleting values..." << endl;
