@@ -64,7 +64,19 @@ int main()
     for(int i = n-1; i > 0; i--){
         u_exact[i] = exact_solution(x[i]);
     }
-    // Write result to file 1
+
+    // LU decomposition
+    // First we must make the matrices (Previosly defined as vectors)
+    double A[n][n];
+    // Make all elements zero:
+    for(int i = 0; i < n; i++){
+        for(int j = 0; i <n; i++){
+            A[i][j] = 0.0;
+        }
+    }
+
+
+    // Write result to file 1 (General alorithm)
     ofstream myfile;
     cout << "We have openened a file!" << endl;
     myfile.open("res2.txt");
