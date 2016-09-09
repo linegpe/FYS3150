@@ -74,6 +74,24 @@ int main()
             A[i][j] = 0.0;
         }
     }
+    // Define elements along diagonal
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; i++){
+            if (i==j){
+                A[i][j] = 2;
+            }
+            else if (i == j-1){
+                A[i][j] = -1;
+            }
+            else if (i == j+1){
+                A[i][j] == -1;
+            }
+            else {
+                A[i][j] = 0.0;
+            }
+        }
+    }
+    A.print("A=");
 
 
     // Write result to file 1 (General alorithm)
