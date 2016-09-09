@@ -1,8 +1,10 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include "armadillo"
 
 using namespace std;
+using namespace arma;
 
 // Exact solution we want to compare with
 double source_term(double x){
@@ -67,30 +69,32 @@ int main()
 
     // LU decomposition
     // First we must make the matrices (Previosly defined as vectors)
-    double A[n][n];
+    //double A[n][n];
+    mat A = zeros<mat>(n,n);
     // Make all elements zero:
+    //for(int i = 0; i < n; i++){
+    //    for(int j = 0; i <n; i++){
+    //        A[i][j] = 0.0;
+    //    }
+   // }
+   // // Define elements along diagonal
     for(int i = 0; i < n; i++){
-        for(int j = 0; i <n; i++){
-            A[i][j] = 0.0;
-        }
-    }
-    // Define elements along diagonal
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; i++){
+        for(int j = 0; j < n; j++){
             if (i==j){
-                A[i][j] = 2;
+                A(i,j) = 2;
             }
             else if (i == j-1){
-                A[i][j] = -1;
+                A(i,j) = -1;
             }
             else if (i == j+1){
-                A[i][j] == -1;
+                A(i,j) = -1;
             }
             else {
-                A[i][j] = 0.0;
+                A(i,j) = 0;
             }
         }
     }
+    //mat A = A;
     A.print("A=");
 
 
