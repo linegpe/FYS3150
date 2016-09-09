@@ -18,7 +18,7 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 10;
+    int n = 12;
     double h = 1./(n-1);
     double *a = new double[n];
     double *b = new double[n];
@@ -26,10 +26,6 @@ int main()
     double *u = new double[n];
     double *f = new double[n];
     double *x = new double[n];
-    double *b_tilde = new double[n];
-    double *c_tilde = new double[n];
-    double *f_tilde1 = new double[n];
-    double *f_tilde2 = new double[n];
     double *u_exact = new double[n];
     cout << "So far so good" << endl;
     // Fill vectors with values
@@ -47,17 +43,14 @@ int main()
     f[n-1] = 0;
 
     // Forward substitution
-    b_tilde[0] = b[0];
     for(int i = 1; i < n; i++){
-        b_tilde[i] = b[i] - (c[i-1]*a[i])/b_tilde[i-1];
-        f_tilde1[i] = f[i] - (c[i-1]*a[i])/b_tilde[i-1];
+        b[i] = b[i] - (c[i-1]*a[i])/b[i-1];
+        f[i] = f[i] - (f[i-1]*a[i])/b[i-1];
     }
-    u[n-1] = f_tilde1[n-1]/b_tilde[n-1];
+    u[n-1] = f[n-1]/b[n-1];
     // Backward substitution
     for(int i = n-2; i >= 0; i--){
-        //c_tilde[i] = c[i] - c[i+1]/b_tilde[i+1];
-        u[i] = (f_tilde1[i] - c[i]*u[i+1])/b_tilde[i];
-        //f_tilde2[i] = f_tilde1[i] - c[i+1]/b_tilde[i+1];
+        u[i] = (f[i] - c[i]*u[i+1])/b[i];
     }
     cout << "So far so good" << endl;
     // Then u is equal to f_tilde2
@@ -71,7 +64,7 @@ int main()
     for(int i = n-1; i > 0; i--){
         u_exact[i] = exact_solution(x[i]);
     }
-    // Write result to file
+    // Write result to file 1
     ofstream myfile;
     cout << "We have openened a file!" << endl;
     myfile.open("res2.txt");
@@ -86,11 +79,6 @@ int main()
     delete [] f;
     delete [] u;
     delete [] x;
-    delete [] f_tilde1;
-    delete [] f_tilde2;
-    delete [] b_tilde;
-    delete [] c_tilde;
-    delete [] u_exact;
 
     cout << "Done!" << endl;
 
