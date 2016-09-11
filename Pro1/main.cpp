@@ -18,7 +18,7 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 12;
+    int n = 102;
     double h = 1./(n-1);
     double *a = new double[n];
     double *b = new double[n];
@@ -79,8 +79,6 @@ int main()
 
     // Define A as a matrix and rest as vectors (armadillo syntax)
     mat A = zeros<mat>(n,n);
-
-    // // Define elements along diagonal
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             if (i==j){
