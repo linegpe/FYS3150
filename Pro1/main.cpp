@@ -2,6 +2,7 @@
 #include <cmath>
 #include <fstream>
 #include "armadillo"
+#include "time.h"
 
 using namespace std;
 using namespace arma;
@@ -18,7 +19,7 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 102;
+    int n = 10002;
     double h = 1./(n-1);
     double *a = new double[n];
     double *b = new double[n];
@@ -27,22 +28,36 @@ int main()
     double *f = new double[n];
     double *x = new double[n];
     double *u_exact = new double[n];
-    //double *b2 = new double[n]; // Make new vectors to use in special algorithm
-    //double *
+    double *b2 = new double[n];
+    double *f2 = new double[n];
+    double *u2 = new double[n];
 
     // Fill vectors with values
     for(int i = 0; i < n; i++){
         a[i] = -1;
         b[i] = 2;
+        b2[i] = 2;
         c[i] = -1;
         f[i] = h*h*source_term(i*h);
+        f2[i] = h*h*source_term(i*h);
     }
-    b[0] = 1;
-    c[0] = 0;
-    f[0] = 0;
+
+    // Dirichlet boundary conditions:
     a[n-1] = 0;
+
+    b[0] = 1;
     b[n-1] = 1;
+    
+    c[0] = 0;
+    
+    f[0] = 0;
     f[n-1] = 0;
+
+    b2[0] = 1;
+    b2[n-1] = 1;
+
+    f2[0] = 0;
+    f2[n-1] = 0;
 
     // PART 1: EXACT SOLUTION
 
@@ -50,34 +65,58 @@ int main()
     for(int i = 0; i < n; i++){
         x[i] = i*h;
     }
-    // Discretize exact solution to compare with approximation
+    // Discretize exact solution to compare with approximations
     for(int i = n-1; i > 0; i--){
         u_exact[i] = exact_solution(x[i]);
     }
 
     // PART 2: GENERAL ALGORITHM
 
+    clock_t start_general, finish_general; // Timing the algorithm
+    start_general = clock();
+
     // Forward substitution
     for(int i = 1; i < n; i++){
         b[i] = b[i] - (c[i-1]*a[i])/b[i-1];
-        f[i] = f[i] - (f[i-1]*a[i])/b[i-1];
+        f[i] = f[i] - (f[i-1]*a[i])/b[i-1]; 
     }
-    //u[n-1] = f[n-1]/b[n-1]; What happened here? If not needed, delete.
     // Backward substitution
     for(int i = n-2; i >= 0; i--){
         u[i] = (f[i] - c[i]*u[i+1])/b[i];
     }
+    finish_general = clock();
+    double time_general = ((finish_general - start_general)/CLOCKS_PER_SEC);
+    cout << "Relative time, general algorithm: " << time_general << endl;
 
     // Calculating the error
     double *epsilon = new double[n];
     for (int i = 1; i < n-1; i++){
-         epsilon[i] = log(fabs((u[i]-u_exact[i])/u[i]));
-    } // Something wrong here. Every element in epsilon are the same.
+        epsilon[i] = log(fabs((u[i]-u_exact[i])/u[i]));
+    }  
 
+    // PART 3: SPECIAL CASE ALGORITHM
 
-    // PART 3: LU DECOMPOSITION
+    clock_t start_special, finish_special; // Timing the algorithm
+    start_special = clock();
 
-    // Define A as a matrix and rest as vectors (armadillo syntax)
+    // Forward
+    for(int i = 1; i < n; i++){
+        b2[i] = double((i+1.0)/i);
+        f2[i] = f2[i] + (f2[i-1])/b2[i-1];
+    }
+
+    // Backward
+    for(int i = n-2; i >= 0; i--){
+        u2[i] = (f2[i] + u2[i+1])/b2[i];
+    }
+
+    finish_special = clock();
+    double time_special = ((finish_special - start_special)/CLOCKS_PER_SEC);
+    cout << "Relative time, special algorithm: " << time_special << endl;
+
+    // PART 4: LU DECOMPOSITION
+
+    // Define A as a matrix (armadillo syntax)
     mat A = zeros<mat>(n,n);
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
@@ -96,13 +135,13 @@ int main()
         }
     }
 
-    // Special cases:
+    // Special elements:
     A(0,0) = 1;
     A(0,1) = 0;
     A(n-1,n-1) = 1;
     A(n-1,n-2) = 0;
 
-    A.print("A = ");
+    // Define the f-vector
     vec f_vec = zeros<vec>(n);
     for (int i = 0; i< n; i++){
         f_vec(i) = h*h*source_term(x[i]);
@@ -110,21 +149,27 @@ int main()
     f_vec(0) = 0;
     f_vec(n-1) = 0;
 
+    clock_t start_LU, finish_LU;
+    start_LU = clock();
+
     // LU decomposition
     mat L,U;
     lu(L,U,A);
-    L.print("L = ");
-    U.print("U = ");
     mat y_vec = solve(L,f_vec);
     vec v_vec = solve(U,y_vec);
-    cout << v_vec << endl;
+
+    finish_LU = clock();
+    double time_LU = ((finish_LU - start_LU)/CLOCKS_PER_SEC);
+    cout << "Relative time, LU decomposition: " << time_LU << endl;
 
 
-    // Write result to file 1 (General alorithm) and LU v in last column
+    // Write result to file
+    // Colons: 
+    // 1: i, 2: general alg. solution, 3: exact solution, 4: LU solution, 5: error estimate, 6: special alg. solution
     ofstream myfile;
     myfile.open("res2.txt");
     for(int i = 0; i < n; i++){
-        myfile << i << " " << u[i] << " " << u_exact[i] << " " << v_vec[i] <<  " " << epsilon[i] << endl;
+        myfile << i << " " << u[i] << " " << u_exact[i] << " " << v_vec[i] <<  " " << epsilon[i] << " " << u2[i] << endl;
     }
     myfile.close();
     delete [] a;
@@ -132,10 +177,11 @@ int main()
     delete [] c;
     delete [] f;
     delete [] u;
-    delete [] x;
+    delete [] x; 
+    delete [] f2;
+    delete [] b2;
 
     cout << "Done!" << endl;
 
     return 0;
 }
-
