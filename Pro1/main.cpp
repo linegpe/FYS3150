@@ -93,7 +93,8 @@ int main()
     double *epsilon = new double[n];
     for (int i = 1; i < n-1; i++){
         epsilon[i] = log(fabs((u[i]-u_exact[i])/u[i]));
-    }  
+    } 
+    cout << "Error estimate: " << epsilon[1] << endl; 
 
     // PART 3: SPECIAL CASE ALGORITHM
 
@@ -107,7 +108,7 @@ int main()
     }
 
     // Backward
-    for(int i = n-2; i >= 0; i--){
+    for(int i = n-2; i > 0; i--){
         u2[i] = (f2[i] + u2[i+1])/b2[i];
     }
 
@@ -122,7 +123,7 @@ int main()
     int N = 0;
     if (n >= n_max){
         N = 0;
-        cout << "n-value too big to perform LU-decomposition. " << endl;
+        cout << "n-value too big to perform LU-decomposition. " << endl; // Aborts
     }
     else{
         N = n;
