@@ -19,7 +19,8 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 10002;
+    int n = 12;      // Length/size of vectors/matrices
+
     double h = 1./(n-1);
     double *a = new double[n];
     double *b = new double[n];
@@ -85,7 +86,7 @@ int main()
         u[i] = (f[i] - c[i]*u[i+1])/b[i];
     }
     finish_general = clock();
-    double time_general = ((finish_general - start_general)/CLOCKS_PER_SEC);
+    double time_general = ( double (finish_general - start_general)/CLOCKS_PER_SEC);
     cout << "Relative time, general algorithm: " << time_general << endl;
 
     // Calculating the error
@@ -111,15 +112,26 @@ int main()
     }
 
     finish_special = clock();
-    double time_special = ((finish_special - start_special)/CLOCKS_PER_SEC);
+    double time_special = ( double (finish_special - start_special)/CLOCKS_PER_SEC);
     cout << "Relative time, special algorithm: " << time_special << endl;
 
     // PART 4: LU DECOMPOSITION
 
+    // Check if n is too big for LU-decomposition
+    int n_max = 1500; // Biggest value for n that does not crash computer
+    int N = 0;
+    if (n >= n_max){
+        N = 0;
+        cout << "n-value too big to perform LU-decomposition. " << endl;
+    }
+    else{
+        N = n;
+    }
+
     // Define A as a matrix (armadillo syntax)
-    mat A = zeros<mat>(n,n);
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
+    mat A = zeros<mat>(N,N);
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
             if (i==j){
                 A(i,j) = 2;
             }
@@ -138,16 +150,16 @@ int main()
     // Special elements:
     A(0,0) = 1;
     A(0,1) = 0;
-    A(n-1,n-1) = 1;
-    A(n-1,n-2) = 0;
+    A(n-1,N-1) = 1;
+    A(n-1,N-2) = 0;
 
     // Define the f-vector
-    vec f_vec = zeros<vec>(n);
-    for (int i = 0; i< n; i++){
+    vec f_vec = zeros<vec>(N);
+    for (int i = 0; i< N; i++){
         f_vec(i) = h*h*source_term(x[i]);
     }
     f_vec(0) = 0;
-    f_vec(n-1) = 0;
+    f_vec(N-1) = 0;
 
     clock_t start_LU, finish_LU;
     start_LU = clock();
@@ -159,8 +171,8 @@ int main()
     vec v_vec = solve(U,y_vec);
 
     finish_LU = clock();
-    double time_LU = ((finish_LU - start_LU)/CLOCKS_PER_SEC);
-    cout << "Relative time, LU decomposition: " << time_LU << endl;
+    double time_LU = ( double (finish_LU - start_LU)/CLOCKS_PER_SEC);
+    cout << "Relative time, LU decomposition:  " << time_LU << endl;
 
 
     // Write result to file
