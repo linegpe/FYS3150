@@ -7,7 +7,7 @@
 using namespace std;
 using namespace arma;
 
-// Exact solution we want to compare with
+// f(x), our known right hand function 
 double source_term(double x){
     return 100*exp(-10*x);
    }
@@ -22,7 +22,7 @@ int main()
     int n = 10000;      // Length/size of vectors/matrices
     cout << "n = " << n << endl;
 
-    double h = 1./(n-1);
+    double h = 1./(n-1); // Steplength
     double *a = new double[n];
     double *b = new double[n];
     double *c = new double[n];
@@ -34,7 +34,7 @@ int main()
     double *f2 = new double[n];
     double *u2 = new double[n];
 
-    // Fill vectors with values
+    // Fill matrix and right hand function with values
     for(int i = 0; i < n; i++){
         a[i] = -1;
         b[i] = 2;
@@ -44,7 +44,7 @@ int main()
         f2[i] = h*h*source_term(i*h);
     }
 
-    // Dirichlet boundary conditions:
+    // Boundary conditions:
     a[n-1] = 0;
 
     b[0] = 1;
@@ -93,7 +93,7 @@ int main()
     // Calculating the error
     double *epsilon = new double[n];
     for (int i = 1; i < n-1; i++){
-        epsilon[i] = log(fabs((u[i]-u_exact[i])/u[i]));
+        epsilon[i] = log(fabs((u[i]-u_exact[i])/u_exact[i]));
     } 
     cout << "Error estimate: " << epsilon[1] << endl; 
 
@@ -102,13 +102,13 @@ int main()
     clock_t start_special, finish_special; // Timing the algorithm
     start_special = clock();
 
-    // Forward
+    // Forward substitution
     for(int i = 1; i < n; i++){
         b2[i] = double((i+1.0)/i);
         f2[i] = f2[i] + (f2[i-1])/b2[i-1];
     }
 
-    // Backward
+    // Backward substitution
     for(int i = n-2; i > 0; i--){
         u2[i] = (f2[i] + u2[i+1])/b2[i];
     }
@@ -120,7 +120,7 @@ int main()
     // PART 4: LU DECOMPOSITION
 
     // Check if n is too big for LU-decomposition
-    int n_max = 15000; // Biggest value for n that does not crash computer
+    int n_max = 15000; // Biggest value for n that does not crash my computer
     int N = 0;
     if (n >= n_max){
         N = 0;
@@ -152,8 +152,8 @@ int main()
     // Special elements:
     A(0,0) = 1;
     A(0,1) = 0;
-    A(n-1,N-1) = 1;
-    A(n-1,N-2) = 0;
+    A(N-1,N-1) = 1;
+    A(N-1,N-2) = 0;
 
     // Define the f-vector
     vec f_vec = zeros<vec>(N);
