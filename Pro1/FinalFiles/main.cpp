@@ -19,7 +19,7 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 10000;      // Length/size of vectors/matrices
+    int n = 1000;      // Length/size of vectors/matrices
     cout << "n = " << n << endl;
 
     double h = 1./(n-1);
@@ -120,7 +120,7 @@ int main()
     // PART 4: LU DECOMPOSITION
 
     // Check if n is too big for LU-decomposition
-    int n_max = 15000; // Biggest value for n that does not crash computer
+    int n_max = 10001; // Biggest value for n that does not crash computer
     int N = 0;
     if (n >= n_max){
         N = 0;
