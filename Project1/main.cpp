@@ -19,8 +19,12 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    int n = 10000;      // Length/size of vectors/matrices
-    cout << "n = " << n << endl;
+    cout << "Please select n-value: ";
+    int n;
+    cin >> n;
+    //int n = 100;           // Length/size of vectors/matrices
+                            // Manually change this for different n values
+    cout << "n = " << n << " gives:" << endl << endl;
 
     double h = 1./(n-1); // Steplength
     double *a = new double[n];
@@ -120,7 +124,7 @@ int main()
     // PART 4: LU DECOMPOSITION
 
     // Check if n is too big for LU-decomposition
-    int n_max = 15000; // Biggest value for n that does not crash my computer
+    int n_max = 1500; // Biggest value for n that runs on my computer in a reasonable time
     int N = 0;
     if (n >= n_max){
         N = 0;
@@ -174,15 +178,21 @@ int main()
 
     finish_LU = clock();
     double time_LU = ( double (finish_LU - start_LU)/CLOCKS_PER_SEC);
-    cout << "Relative time, LU decomposition:  " << time_LU << endl;
+    cout << "Relative time, LU decomposition:  " << time_LU << endl << endl;
 
 
     // Write result to file
-    // Colons: 
-    // 1: i, 2: general alg. solution, 3: exact solution, 4: LU solution, 5: error estimate, 6: special alg. solution
+    cout << "Where do you want to save the results? Please state filename: ";
+    string user_filename;
+    cin >> user_filename;
+    cout << user_filename << endl;
+    cout << "Writing to file..." << endl;
+
     ofstream myfile;
-    myfile.open("res2.txt");
+    myfile.open(user_filename.c_str());
     for(int i = 0; i < n; i++){
+        // Colons: 
+        // 1: i, 2: general alg. solution, 3: exact solution, 4: LU solution, 5: error estimate, 6: special alg. solution
         myfile << i << " " << u[i] << " " << u_exact[i] << " " << v_vec[i] <<  " " << epsilon[i] << " " << u2[i] << endl;
     }
     myfile.close();
@@ -195,7 +205,7 @@ int main()
     delete [] f2;
     delete [] b2;
 
-    cout << "Done!" << endl;
+    cout << "Done!" << endl << endl;
 
     return 0;
 }
