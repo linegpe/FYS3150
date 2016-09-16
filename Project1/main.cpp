@@ -20,10 +20,8 @@ int main()
 {
     // Declaring variables and vectors
     cout << "Please select n-value: ";
-    int n;
+    int n;  // Dimension
     cin >> n;
-    //int n = 100;           // Length/size of vectors/matrices
-                            // Manually change this for different n values
     cout << "n = " << n << " gives:" << endl << endl;
 
     double h = 1./(n-1); // Steplength
