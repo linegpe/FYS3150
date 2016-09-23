@@ -7,6 +7,7 @@ def run_cmd(cmd):
 fname= "main"
 fname2 = "main2"
 header1 = "jacobi"
+header2 = "functions"
 arma = "eigenvalues"
 
 print "\n \n \n"

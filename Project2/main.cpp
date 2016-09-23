@@ -3,22 +3,22 @@
 #include "jacobi.h"
 #include <algorithm>
 #include <armadillo>
-
 #include <iomanip>
+//#include "functions.h"
 
 using namespace std;
 using namespace arma;
 
-void printMatrix(double ** A, int N) {
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			cout << setw(12) << A[i][j] << " ";
-		}
-		cout << endl;
-	}
-	cout << endl;
-	return; 
-}
+// void printMatrix(double ** A, int N) {
+// 	for (int i = 0; i < N; i++) {
+// 		for (int j = 0; j < N; j++) {
+// 			cout << setw(12) << A[i][j] << " ";
+// 		}
+// 		cout << endl;
+// 	}
+// 	cout << endl;
+// 	return; 
+// }
 
 int main(){
 	int N = 190;

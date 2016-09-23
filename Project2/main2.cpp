@@ -2,7 +2,7 @@
 #include <cmath>
 #include "jacobi.h"
 #include <algorithm>
-#include "armadillo"
+#include <armadillo>
 
 #include <iomanip>
 
@@ -27,8 +27,7 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
-	double alpha = hbar*hbar/(mass*beta_e2);
-	double omega2 = 0.25; 	//(1.0/4.0) * (m*k/hbar) * pow(alpha,4);
+	double omega2 = 0.25; 		
 	double konst = mass*omega2;
 
 	double epsilon = pow(10,-8);
@@ -60,9 +59,6 @@ int main(){
 		A[i] = new double [N];
 		R[i] = new double [N];
 	}
-
-	// Define end values
-	A[N-1][N-1] = 2.0/(h*h) + V[N];
 
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
