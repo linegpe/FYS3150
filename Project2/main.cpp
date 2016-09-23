@@ -2,7 +2,7 @@
 #include <cmath>
 #include "jacobi.h"
 #include <algorithm>
-#include "armadillo"
+#include <armadillo>
 
 #include <iomanip>
 
