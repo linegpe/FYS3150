@@ -34,3 +34,4 @@ if save == "y":
 	filename = raw_input("Filename (with .png, .jpg etc): ")
 	plt.savefig(filename)
 #plt.show()
+fhdsf
