@@ -7,7 +7,7 @@
 using namespace std;
 using namespace arma;
 
-// f(x), our known right hand function 
+// Exact solution we want to compare with
 double source_term(double x){
     return 100*exp(-10*x);
    }
@@ -19,12 +19,10 @@ double exact_solution(double x){
 int main()
 {
     // Declaring variables and vectors
-    cout << "Please select n-value: ";
-    int n;  // Dimension
-    cin >> n;
-    cout << "n = " << n << " gives:" << endl << endl;
+    int n = 1000;      // Length/size of vectors/matrices
+    cout << "n = " << n << endl;
 
-    double h = 1./(n-1); // Steplength
+    double h = 1./(n-1);
     double *a = new double[n];
     double *b = new double[n];
     double *c = new double[n];
@@ -36,7 +34,7 @@ int main()
     double *f2 = new double[n];
     double *u2 = new double[n];
 
-    // Fill matrix and right hand function with values
+    // Fill vectors with values
     for(int i = 0; i < n; i++){
         a[i] = -1;
         b[i] = 2;
@@ -46,7 +44,7 @@ int main()
         f2[i] = h*h*source_term(i*h);
     }
 
-    // Boundary conditions:
+    // Dirichlet boundary conditions:
     a[n-1] = 0;
 
     b[0] = 1;
@@ -95,7 +93,7 @@ int main()
     // Calculating the error
     double *epsilon = new double[n];
     for (int i = 1; i < n-1; i++){
-        epsilon[i] = log(fabs((u[i]-u_exact[i])/u_exact[i]));
+        epsilon[i] = log(fabs((u[i]-u_exact[i])/u[i]));
     } 
     cout << "Error estimate: " << epsilon[1] << endl; 
 
@@ -104,13 +102,13 @@ int main()
     clock_t start_special, finish_special; // Timing the algorithm
     start_special = clock();
 
-    // Forward substitution
+    // Forward
     for(int i = 1; i < n; i++){
         b2[i] = double((i+1.0)/i);
         f2[i] = f2[i] + (f2[i-1])/b2[i-1];
     }
 
-    // Backward substitution
+    // Backward
     for(int i = n-2; i > 0; i--){
         u2[i] = (f2[i] + u2[i+1])/b2[i];
     }
@@ -122,7 +120,7 @@ int main()
     // PART 4: LU DECOMPOSITION
 
     // Check if n is too big for LU-decomposition
-    int n_max = 1500; // Biggest value for n that runs on my computer in a reasonable time
+    int n_max = 10001; // Biggest value for n that does not crash computer
     int N = 0;
     if (n >= n_max){
         N = 0;
@@ -154,8 +152,8 @@ int main()
     // Special elements:
     A(0,0) = 1;
     A(0,1) = 0;
-    A(N-1,N-1) = 1;
-    A(N-1,N-2) = 0;
+    A(n-1,N-1) = 1;
+    A(n-1,N-2) = 0;
 
     // Define the f-vector
     vec f_vec = zeros<vec>(N);
@@ -176,21 +174,15 @@ int main()
 
     finish_LU = clock();
     double time_LU = ( double (finish_LU - start_LU)/CLOCKS_PER_SEC);
-    cout << "Relative time, LU decomposition:  " << time_LU << endl << endl;
+    cout << "Relative time, LU decomposition:  " << time_LU << endl;
 
 
     // Write result to file
-    cout << "Where do you want to save the results? Please state filename: ";
-    string user_filename;
-    cin >> user_filename;
-    cout << user_filename << endl;
-    cout << "Writing to file..." << endl;
-
+    // Colons: 
+    // 1: i, 2: general alg. solution, 3: exact solution, 4: LU solution, 5: error estimate, 6: special alg. solution
     ofstream myfile;
-    myfile.open(user_filename.c_str());
+    myfile.open("res2.txt");
     for(int i = 0; i < n; i++){
-        // Colons: 
-        // 1: i, 2: general alg. solution, 3: exact solution, 4: LU solution, 5: error estimate, 6: special alg. solution
         myfile << i << " " << u[i] << " " << u_exact[i] << " " << v_vec[i] <<  " " << epsilon[i] << " " << u2[i] << endl;
     }
     myfile.close();
@@ -203,7 +195,7 @@ int main()
     delete [] f2;
     delete [] b2;
 
-    cout << "Done!" << endl << endl;
+    cout << "Done!" << endl;
 
     return 0;
 }

@@ -21,7 +21,16 @@ void printMatrix(double ** A, int N) {
 }
 
 int main(){
-	int N = 190;
+	int N = 200;
+
+	// Declaring constants:
+	double mass = 0.5e6;	//eV/c^2
+	double hbar = 1240;		//eVnm/c^2
+	double beta_e2 = 1.44; 	//eVnm
+	double alpha = hbar*hbar/(mass*beta_e2);
+	double omega2 = 0.25; 	//(1.0/4.0) * (m*k/hbar) * pow(alpha,4);
+	double konst = mass*omega2;
+
 	double epsilon = pow(10,-8);
 	double *rho = new double[N+1];
 	double *V = new double[N+1];
@@ -37,9 +46,8 @@ int main(){
 
 	for (int i = 0; i < N+1; i++){
 		rho[i] = rho0 + i*h;
-		V[i] = rho[i]*rho[i];
+		V[i] = rho[i]*rho[i]*omega2 + 1.0/rho[i];
 	}
-
 
 	cout << endl;
 
@@ -52,6 +60,9 @@ int main(){
 		A[i] = new double [N];
 		R[i] = new double [N];
 	}
+
+	// Define end values
+	A[N-1][N-1] = 2.0/(h*h) + V[N];
 
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
@@ -88,7 +99,7 @@ int main(){
 		iterations++;
 	}
 
-		// Timing finished
+	// Timing finished
     finish = clock();
     double time = ( double (finish - start)/CLOCKS_PER_SEC);
     cout << endl << "Run time: " << time << " sec." << endl << endl;
@@ -106,7 +117,7 @@ int main(){
 	vec eigval2 = zeros<vec>(N);
 
 	// Print 3 first eigenvalues
-	cout << "Eigenvalues: " << endl;
+	cout << "Eigenvalues" << endl;
 	for (int i = 0; i < N; i++){
 		eigval2(i) = eigenvalues[i];
 	}
@@ -114,6 +125,7 @@ int main(){
 	cout << eigval2(0) << endl;
 	cout << eigval2(1) << endl;
 	cout << eigval2(2) << endl;
+
 
 	//Find index of eigenvalues
 	int index0;
@@ -124,6 +136,7 @@ int main(){
 		if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
 		if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
 	}
+
 
 	// Write results to file if wanted
 	cout << "Do you wish to save these results? [y/n] ";
@@ -149,10 +162,11 @@ int main(){
 	}
 
 	ofstream myfile;
-	myfile.open("eigvecs.txt");
+	myfile.open("eigvecs2.txt");
 	for (int i = 0; i < N; i++){
 		myfile << pow(R[i][index0],2) << "   " << pow(R[i][index1],2) << "   " << pow(R[i][index2],2) << endl;
 	}
 	myfile.close();
 	return 0;
+
 }
