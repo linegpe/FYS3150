@@ -7,39 +7,12 @@ using namespace std;
 double biggest_offdiag_value( double ** A, int * k, int * l, int n);
 void rotate( double ** A, double ** R, int k, int l , int n);
 
-void jacobi_algorithm( double ** A, double ** R, int n){
-	double epsilon = pow(10,-8);
-	int k, l;
-
-	// Make eigenvector matrix
-	for (int i = 0; i < n; i++){
-		for (int j = 0; j < n; j++){
-			if (i==j){
-				R[i][j] = 0.0;
-			}
-		}
-	}
-
-	double max_iterations = (double) n * (double) n * (double) n;
-	int iterations = 0;
-	double maxoffdiagonal = biggest_offdiag_value(A, &k, &l, n);
-
-	while (fabs(maxoffdiagonal) > epsilon && (double) iterations < max_iterations){
-		maxoffdiagonal = biggest_offdiag_value(A, &k, &l, n);
-		rotate(A,R,k,l,n);
-		iterations ++;
-	}
-
-	cout << "Number of iterations = " << iterations << endl;
-	return;
-}
-
 
 // Function to find the maximum matrix element:
 double biggest_offdiag_value( double ** A, int * k, int * l, int n){
 	double max = 0.0;
 	for (int i = 0; i < n; i++){
-		for (int j = 0; j < n; j++){
+		for (int j = i+1; j < n; j++){
 			if (fabs(A[i][j]) > max){
 				max = fabs(A[i][j]);
 				*l = i;
@@ -55,13 +28,13 @@ void rotate( double ** A, double ** R, int k, int l , int n){
 	double s, c; // Shortened for sin and cos
 	if (A[k][l] != 0.0){
 		double t, tau;
-		tau = (A[l][l] - A[k][k])/(2*A[k][l]);
+		tau = (A[l][l] - A[k][k])/(2.0*A[k][l]);
 		if (tau > 0){
 			t = 1.0/(tau + sqrt(1.0 + tau*tau));
 		} else {
 			t = -1.0/(-tau + sqrt(1.0 + tau*tau));
 		}
-		c = 1.0/(1+t*t);
+		c = 1.0/sqrt(1+t*t);
 		s = t*c;
 	} else {
 		c = 1.0;
