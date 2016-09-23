@@ -139,7 +139,7 @@ int main(){
 
 
 	// Write results to file if wanted
-	cout << "Do you wish to save these results? [y/n] ";
+	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";
 	string answer;
 	cin >> answer;
 	if (answer == "y"){
