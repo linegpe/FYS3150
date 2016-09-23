@@ -17,7 +17,7 @@ print "\n \n \n"
 
 print " JACOBI ALGORITHM "
 
-run_cmd("g++ -o %s.out %s.cpp %s.cpp -larmadillo -lblas -llapack" % (fname, fname, header1))
+run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp %s.cpp -larmadillo" % (fname, fname, header1))
 
 run_cmd("./%s.out" % fname)
 
@@ -28,7 +28,7 @@ print "\n \n \n"
 
 print " ARMADILLO ALGORITHM "
 
-run_cmd("g++ -o %s.out %s.cpp -larmadillo -lblas -llapack" % (arma, arma))
+run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp -larmadillo" % (arma, arma))
 
 run_cmd("./%s.out" % arma)
 
@@ -40,6 +40,6 @@ print "========== TWO ELECTRONS =========="
 
 print "\n \n \n"
 
-run_cmd("g++ -o %s.out %s.cpp %s.cpp -larmadillo -lblas -llapack" % (fname2, fname2, header1))
+run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp %s.cpp -larmadillo" % (fname2, fname2, header1))
 
 run_cmd("./%s.out" % fname2)
