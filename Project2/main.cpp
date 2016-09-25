@@ -4,24 +4,13 @@
 #include <algorithm>
 #include <armadillo>
 #include <iomanip>
-//#include "functions.h"
+#include "functions.h"
 
 using namespace std;
 using namespace arma;
 
-// void printMatrix(double ** A, int N) {
-// 	for (int i = 0; i < N; i++) {
-// 		for (int j = 0; j < N; j++) {
-// 			cout << setw(12) << A[i][j] << " ";
-// 		}
-// 		cout << endl;
-// 	}
-// 	cout << endl;
-// 	return; 
-// }
-
 int main(){
-	int N = 190;
+	int N = 200;
 	double epsilon = pow(10,-8);
 	double *rho = new double[N+1];
 	double *V = new double[N+1];
@@ -43,6 +32,11 @@ int main(){
 
 	cout << endl;
 
+	// double **A = makeAmatrix(N,h,V,nondiagonal_value);
+	// double **R = makeRmatrix(N);
+
+	// printMatrix(A,N);
+	// printMatrix(R,N);
 
 	// Make empty NxN matrices A and R
 	
