@@ -20,7 +20,6 @@ int main(){
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength
-
 	double nondiagonal_value = -1.0/(h*h);
 	
 
@@ -29,17 +28,9 @@ int main(){
 		V[i] = rho[i]*rho[i];
 	}
 
-
 	cout << endl;
-
-	// double **A = makeAmatrix(N,h,V,nondiagonal_value);
-	// double **R = makeRmatrix(N);
-
-	// printMatrix(A,N);
-	// printMatrix(R,N);
-
-	// Make empty NxN matrices A and R
 	
+	// Make matrices A and R
 	double ** A = new double*[N];
 	double ** R = new double*[N];
 	for (int i = 0; i < N; i++) {
@@ -47,6 +38,7 @@ int main(){
 		R[i] = new double [N];
 	}
 
+	// Fill A and R with values
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == j){
@@ -69,33 +61,32 @@ int main(){
 	int k, l;
 	double maxoffdiagonal = biggest_offdiag_value(A, &k, &l, N);
 	int iterations = 0;
-
 	int max_iterations = N * N * N;
 
 	// Timing the algorithm
     clock_t start, finish; 
     start = clock();
 	
+	// Running the algorithm
 	while (fabs(maxoffdiagonal) > epsilon && iterations < max_iterations){
 		rotate(A,R,k,l,N);
 		maxoffdiagonal = biggest_offdiag_value(A, &k, &l, N);
 		iterations++;
 	}
 
-		// Timing finished
+	// Timing finished
     finish = clock();
     double time = ( double (finish - start)/CLOCKS_PER_SEC);
+    
+    // Print results to terminal
     cout << endl << "Run time: " << time << " sec." << endl << endl;
-
 	cout << endl << "Number of iterations: " << iterations << endl << endl;
-
 
 	// Sort eigenvalues:
 	double *eigenvalues = new double [N];
 	for (int i = 0; i < N; i++){
 		eigenvalues[i] = A[i][i];
 	}
-
 
 	vec eigval2 = zeros<vec>(N);
 
@@ -142,6 +133,7 @@ int main(){
 		cout << "Data not stored in file. " << endl << endl;
 	}
 
+	// Write eigenvectors to file
 	ofstream myfile;
 	myfile.open("eigvecs.txt");
 	for (int i = 0; i < N; i++){

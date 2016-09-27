@@ -1,24 +1,13 @@
 #include <iostream>
 #include <cmath>
-#include "jacobi.h"
 #include <algorithm>
 #include <armadillo>
-
 #include <iomanip>
+#include "jacobi.h"
+#include "functions.h"
 
 using namespace std;
 using namespace arma;
-
-void printMatrix(double ** A, int N) {
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			cout << setw(12) << A[i][j] << " ";
-		}
-		cout << endl;
-	}
-	cout << endl;
-	return; 
-}
 
 int main(){
 	int N = 200;
@@ -39,10 +28,8 @@ int main(){
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength
-
 	double nondiagonal_value = -1.0/(h*h);
 	
-
 	for (int i = 0; i < N+1; i++){
 		rho[i] = rho0 + i*h;
 		V[i] = rho[i]*rho[i]*omega2 + 1.0/rho[i];
@@ -50,9 +37,7 @@ int main(){
 
 	cout << endl;
 
-
-	// Make empty NxN matrices A and R
-	
+	// Make empty NxN matrices A and R	
 	double ** A = new double*[N];
 	double ** R = new double*[N];
 	for (int i = 0; i < N; i++) {
@@ -60,6 +45,7 @@ int main(){
 		R[i] = new double [N];
 	}
 
+	// Fill A and R with values 
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == j){
@@ -82,13 +68,13 @@ int main(){
 	int k, l;
 	double maxoffdiagonal = biggest_offdiag_value(A, &k, &l, N);
 	int iterations = 0;
-
 	int max_iterations = N * N * N;
 
 	// Timing the algorithm
     clock_t start, finish; 
     start = clock();
 	
+	// Running the algorithm
 	while (fabs(maxoffdiagonal) > epsilon && iterations < max_iterations){
 		rotate(A,R,k,l,N);
 		maxoffdiagonal = biggest_offdiag_value(A, &k, &l, N);
@@ -99,16 +85,13 @@ int main(){
     finish = clock();
     double time = ( double (finish - start)/CLOCKS_PER_SEC);
     cout << endl << "Run time: " << time << " sec." << endl << endl;
-
 	cout << endl << "Number of iterations: " << iterations << endl << endl;
-
 
 	// Sort eigenvalues:
 	double *eigenvalues = new double [N];
 	for (int i = 0; i < N; i++){
 		eigenvalues[i] = A[i][i];
 	}
-
 
 	vec eigval2 = zeros<vec>(N);
 
@@ -122,7 +105,6 @@ int main(){
 	cout << eigval2(1) << endl;
 	cout << eigval2(2) << endl;
 
-
 	//Find index of eigenvalues
 	int index0;
 	int index1;
@@ -132,7 +114,6 @@ int main(){
 		if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
 		if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
 	}
-
 
 	// Write results to file if wanted
 	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";
@@ -164,5 +145,4 @@ int main(){
 	}
 	myfile.close();
 	return 0;
-
 }
