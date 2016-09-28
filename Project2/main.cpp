@@ -1,16 +1,18 @@
 #include <iostream>
 #include <cmath>
-#include "jacobi.h"
 #include <algorithm>
 #include <armadillo>
 #include <iomanip>
+#include "jacobi.h"
 #include "functions.h"
 
 using namespace std;
 using namespace arma;
 
 int main(){
+	// Declaring constants and variables
 	int N = 200;
+
 	double epsilon = pow(10,-8);
 	double *rho = new double[N+1];
 	double *V = new double[N+1];
@@ -90,6 +92,17 @@ int main(){
 
 	vec eigval2 = zeros<vec>(N);
 
+	//double *neweigvals = new double [N];
+	//double *v_sorted = new double [N];
+	double *eigenvalues_sorted = new double[N];
+	eigenvalues_sorted = sort(eigenvalues, N, R);
+
+	cout << "Eigenvalues sorted by Sunniva: " << endl;
+	for (int i = 1; i < 4; i++) // First element 0
+	{
+		cout << eigenvalues_sorted[i] << endl;
+	}
+
 	// Print 3 first eigenvalues
 	cout << "Eigenvalues: " << endl;
 	for (int i = 0; i < N; i++){
@@ -105,9 +118,9 @@ int main(){
 	int index1;
 	int index2;
 	for (int i = 0; i < N; i++){
-		if (fabs(eigenvalues[i] - eigval2(0)) < epsilon) {index0 = i;}
-		if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
-		if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[1] < epsilon)) {index0 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[2] < epsilon)) {index1 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[3] < epsilon)) {index2 = i;}
 	}
 
 	// Write results to file if wanted
@@ -124,8 +137,8 @@ int main(){
 		myfile.open(filename.c_str());
 
 		myfile << "Eigenvalues" << "    " << "Time" << "    " << "Iterations" << endl;
-		myfile << "  " << eigval2(0) << "    " << time << "    " << iterations << endl;
-		myfile << "  " << eigval2(1) << endl << "  " << eigval2(2);
+		myfile << "  " << eigenvalues_sorted[1] << "    " << time << "    " << iterations << endl;
+		myfile << "  " << eigenvalues_sorted[2] << endl << "  " << eigenvalues_sorted[3];
 
 		myfile.close();
 		cout << "Results saved in " << filename << endl << endl;
