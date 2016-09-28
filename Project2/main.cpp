@@ -83,6 +83,7 @@ int main(){
     cout << endl << "Run time: " << time << " sec." << endl << endl;
 	cout << endl << "Number of iterations: " << iterations << endl << endl;
 
+	// Sorting eigenvalues
 	double *neweigvals = new double[N];
 	double *eigenvalues = new double [N];
 	for (int i = 0; i < N; i++){
@@ -109,7 +110,6 @@ int main(){
 		if (fabs(neweigvals[i] - eigenvalues_sorted[2]) < epsilon) {index1 = i;}
 		if (fabs(neweigvals[i] - eigenvalues_sorted[3]) < epsilon) {index2 = i;}
 	}
-	cout << "Indexes: " << index0 << " " << index1 << " " << index2 << endl;
 
 	// Write results to file if wanted
 	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";
