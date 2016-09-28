@@ -1,4 +1,4 @@
-### Using Jacobi's Algorithm to Solve the Schrödinger Equation for a Tree-Dimensional Harmonic Oscillator Potential in C++
+### Using Jacobi's Algorithm to Solve the Schrödinger Equation for a Three-Dimensional Harmonic Oscillator Potential in C++
 
 ##### Project 2: FYS3150 - Computational Pyhsic, University of Oslo
 
