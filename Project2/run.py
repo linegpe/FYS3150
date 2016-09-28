@@ -25,7 +25,7 @@ print "\n"
 print " " * (halft-8) + "JACOBI ALGORITHM" + " " * (halft-8)
 print "\n \n"
 
-run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp %s.cpp %s.cpp -larmadillo" % (fname, fname, header1, header2))
+run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp %s.cpp %s.cpp" % (fname, fname, header1, header2))
 
 run_cmd("./%s.out" % fname)
 
