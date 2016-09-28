@@ -1,13 +1,14 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <algorithm>
-#include <armadillo>
+//#include <armadillo>
 #include <iomanip>
 #include "jacobi.h"
 #include "functions.h"
 
 using namespace std;
-using namespace arma;
+//using namespace arma;
 
 int main(){
 	int N = 200;
@@ -87,33 +88,61 @@ int main(){
     cout << endl << "Run time: " << time << " sec." << endl << endl;
 	cout << endl << "Number of iterations: " << iterations << endl << endl;
 
-	// Sort eigenvalues:
+	// Sorting eigenvalues
+	double *neweigvals = new double[N];
 	double *eigenvalues = new double [N];
 	for (int i = 0; i < N; i++){
 		eigenvalues[i] = A[i][i];
+		neweigvals[i] = A[i][i];
 	}
 
-	vec eigval2 = zeros<vec>(N);
+	double *eigenvalues_sorted = new double[N];
+	eigenvalues_sorted = sort(eigenvalues, N, R);
 
-	// Print 3 first eigenvalues
-	cout << "Eigenvalues" << endl;
-	for (int i = 0; i < N; i++){
-		eigval2(i) = eigenvalues[i];
+	cout << "Eigenvalues: " << endl;
+	for (int i = 1; i < 4; i++) // First element 0
+	{
+		cout << eigenvalues_sorted[i] << endl;
 	}
-	eigval2 = sort(eigval2);
-	cout << eigval2(0) << endl;
-	cout << eigval2(1) << endl;
-	cout << eigval2(2) << endl;
 
 	//Find index of eigenvalues
 	int index0;
 	int index1;
 	int index2;
+	double eps2 = 0.1;
 	for (int i = 0; i < N; i++){
-		if (fabs(eigenvalues[i] - eigval2(0)) < epsilon) {index0 = i;}
-		if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
-		if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
+		if (fabs(neweigvals[i] - eigenvalues_sorted[1]) < epsilon) {index0 = i;}
+		if (fabs(neweigvals[i] - eigenvalues_sorted[2]) < epsilon) {index1 = i;}
+		if (fabs(neweigvals[i] - eigenvalues_sorted[3]) < epsilon) {index2 = i;}
 	}
+
+	// // Sort eigenvalues:
+	// double *eigenvalues = new double [N];
+	// for (int i = 0; i < N; i++){
+	// 	eigenvalues[i] = A[i][i];
+	// }
+
+	// vec eigval2 = zeros<vec>(N);
+
+	// // Print 3 first eigenvalues
+	// cout << "Eigenvalues" << endl;
+	// for (int i = 0; i < N; i++){
+	// 	eigval2(i) = eigenvalues[i];
+	// }
+	// eigval2 = sort(eigval2);
+	// cout << eigval2(0) << endl;
+	// cout << eigval2(1) << endl;
+	// cout << eigval2(2) << endl;
+
+	// //Find index of eigenvalues
+	// int index0;
+	// int index1;
+	// int index2;
+	// for (int i = 0; i < N; i++){
+	// 	if (fabs(eigenvalues[i] - eigval2(0)) < epsilon) {index0 = i;}
+	// 	if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
+	// 	if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
+	// }
 
 	// Write results to file if wanted
 	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";
@@ -129,8 +158,8 @@ int main(){
 		myfile.open(filename.c_str());
 
 		myfile << "Eigenvalues" << "    " << "Time" << "    " << "Iterations" << endl;
-		myfile << "  " << eigval2(0) << "    " << time << "    " << iterations << endl;
-		myfile << "  " << eigval2(1) << endl << "  " << eigval2(2);
+		myfile << "  " << neweigvals[1] << "    " << time << "    " << iterations << endl;
+		myfile << "  " << neweigvals[2] << endl << "  " << neweigvals[3];
 
 		myfile.close();
 		cout << "Results saved in " << filename << endl << endl;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <algorithm>
 #include <iomanip>
@@ -6,7 +7,7 @@
 #include "functions.h"
 
 using namespace std;
-using namespace arma;
+//using namespace arma;
 
 int main(){
 	// Declaring constants and variables
