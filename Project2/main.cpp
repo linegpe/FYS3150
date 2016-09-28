@@ -93,7 +93,7 @@ int main(){
 	double *eigenvalues_sorted = new double[N];
 	eigenvalues_sorted = sort(eigenvalues, N, R);
 
-	cout << "Eigenvalues sorted by Sunniva: " << endl;
+	cout << "Eigenvalues: " << endl;
 	for (int i = 1; i < 4; i++) // First element 0
 	{
 		cout << eigenvalues_sorted[i] << endl;
