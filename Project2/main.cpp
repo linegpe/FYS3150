@@ -117,11 +117,13 @@ int main(){
 	int index0;
 	int index1;
 	int index2;
+	double eps2 = 0.0001;
 	for (int i = 0; i < N; i++){
-		if (fabs(eigenvalues[i] - eigenvalues_sorted[1] < epsilon)) {index0 = i;}
-		if (fabs(eigenvalues[i] - eigenvalues_sorted[2] < epsilon)) {index1 = i;}
-		if (fabs(eigenvalues[i] - eigenvalues_sorted[3] < epsilon)) {index2 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[1]) < eps2) {index0 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[2]) < eps2) {index1 = i;}
+		if (fabs(eigenvalues[i] - eigenvalues_sorted[3]) < eps2) {index2 = i;}
 	}
+	cout << "Indexes: " << index0 << " " << index1 << " " << index2 << endl;
 
 	// Write results to file if wanted
 	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";
