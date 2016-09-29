@@ -31,9 +31,6 @@ fig2 = fig.add_subplot(312)
 fig2.plot(rho,r2,label='2nd eigenvector', color='fuchsia')
 
 plt.show(block=False)
-plt.plot(rho,r1,label='1st eigenvector')
-plt.plot(rho,r2,label='2nd eigenvector')
-plt.plot(rho,r3,label='3rd eigenvector')
 
 plt.legend()
 plt.ylabel('Probability $|R(r)|$', fontsize=15)
