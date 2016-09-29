@@ -17,7 +17,7 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
-	double omega2 = 1; 		
+	double omega2 = 5; 		
 		
 	double konst = mass*omega2;
 
