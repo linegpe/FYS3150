@@ -17,7 +17,11 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
+<<<<<<< HEAD
 	double omega2 = 1; 		
+=======
+	double omega2 = 0.25; 		
+>>>>>>> 12402a17e54c9767c71a47f84472c300d105d87d
 	double konst = mass*omega2;
 
 	double epsilon = pow(10,-8);
@@ -25,7 +29,7 @@ int main(){
 	double *V = new double[N+1];
 
 	double rho0 = 0.0;
-	double rhoN = 50;
+	double rhoN = 5;
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength

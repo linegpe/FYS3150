@@ -16,6 +16,7 @@ f.close()
 
 N = len(r1)
 rho = np.linspace(0,5,N)
+<<<<<<< HEAD
 
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
@@ -28,6 +29,12 @@ plt.legend()
 
 fig2 = fig.add_subplot(312)
 fig2.plot(rho,r2,label='2nd eigenvector', color='fuchsia')
+=======
+plt.show(block=False)
+plt.plot(rho,r1,label='1st eigenvector')
+plt.plot(rho,r2,label='2nd eigenvector')
+plt.plot(rho,r3,label='3rd eigenvector')
+>>>>>>> 12402a17e54c9767c71a47f84472c300d105d87d
 plt.legend()
 plt.ylabel('Probability $|R(r)|$', fontsize=15)
 
