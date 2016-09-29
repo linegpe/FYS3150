@@ -17,7 +17,7 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
-	double omega2 = 0.25; 		
+	double omega2 = 0; 		
 	double konst = mass*omega2;
 
 	double epsilon = pow(10,-8);
@@ -25,7 +25,7 @@ int main(){
 	double *V = new double[N+1];
 
 	double rho0 = 0.0;
-	double rhoN = 5.0;
+	double rhoN = 50;
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength
@@ -115,34 +115,6 @@ int main(){
 		if (fabs(neweigvals[i] - eigenvalues_sorted[2]) < epsilon) {index1 = i;}
 		if (fabs(neweigvals[i] - eigenvalues_sorted[3]) < epsilon) {index2 = i;}
 	}
-
-	// // Sort eigenvalues:
-	// double *eigenvalues = new double [N];
-	// for (int i = 0; i < N; i++){
-	// 	eigenvalues[i] = A[i][i];
-	// }
-
-	// vec eigval2 = zeros<vec>(N);
-
-	// // Print 3 first eigenvalues
-	// cout << "Eigenvalues" << endl;
-	// for (int i = 0; i < N; i++){
-	// 	eigval2(i) = eigenvalues[i];
-	// }
-	// eigval2 = sort(eigval2);
-	// cout << eigval2(0) << endl;
-	// cout << eigval2(1) << endl;
-	// cout << eigval2(2) << endl;
-
-	// //Find index of eigenvalues
-	// int index0;
-	// int index1;
-	// int index2;
-	// for (int i = 0; i < N; i++){
-	// 	if (fabs(eigenvalues[i] - eigval2(0)) < epsilon) {index0 = i;}
-	// 	if (fabs(eigenvalues[i] - eigval2(1)) < epsilon) {index1 = i;}
-	// 	if (fabs(eigenvalues[i] - eigval2(2)) < epsilon) {index2 = i;}
-	// }
 
 	// Write results to file if wanted
 	cout << "Do you wish to save the eigenvalues and runtime? [y/n] ";

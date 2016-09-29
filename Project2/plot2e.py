@@ -15,7 +15,7 @@ for line in lines:
 f.close()
 
 N = len(r1)
-rho = np.linspace(0,5,N)
+rho = np.linspace(0,50,N)
 plt.show(block=False)
 plt.plot(rho,r1,label='1st eigenvector')
 plt.plot(rho,r2,label='2nd eigenvector')

@@ -55,3 +55,5 @@ print "\n \n"
 run_cmd("g++ -L/usr/local/lib -I/usr/local/include -o %s.out %s.cpp %s.cpp %s.cpp" % (fname2, fname2, header1, header2))
 
 run_cmd("./%s.out" % fname2)
+
+run_cmd("python plot2e.py")
