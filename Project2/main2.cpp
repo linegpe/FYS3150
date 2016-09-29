@@ -18,8 +18,7 @@ int main(){
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
 	double omega2 = 1; 		
-
-	double omega2 = 0.25; 		
+		
 	double konst = mass*omega2;
 
 	double epsilon = pow(10,-8);
