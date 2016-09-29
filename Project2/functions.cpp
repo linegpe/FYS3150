@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include <armadillo>
 #include <iomanip>
 #include "functions.h"
 
