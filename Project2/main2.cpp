@@ -2,13 +2,11 @@
 #include <fstream>
 #include <cmath>
 #include <algorithm>
-//#include <armadillo>
 #include <iomanip>
 #include "jacobi.h"
 #include "functions.h"
 
 using namespace std;
-//using namespace arma;
 
 int main(){
 	int N = 200;
@@ -17,7 +15,7 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
-	double omega2 = 5; 		
+	double omega2 = 5.0; 		
 		
 	double konst = mass*omega2;
 
@@ -26,7 +24,7 @@ int main(){
 	double *V = new double[N+1];
 
 	double rho0 = 0.0;
-	double rhoN = 5;
+	double rhoN = 10;
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength
@@ -141,7 +139,7 @@ int main(){
 	}
 
 	ofstream myfile;
-	myfile.open("eigvecs2.txt");
+	myfile.open("eigvecs2_omega_5.txt");
 	for (int i = 0; i < N; i++){
 		myfile << pow(R[i][index0],2) << "   " << pow(R[i][index1],2) << "   " << pow(R[i][index2],2) << endl;
 	}

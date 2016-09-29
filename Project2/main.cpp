@@ -18,7 +18,7 @@ int main(){
 	double *V = new double[N+1];
 
 	double rho0 = 0.0;
-	double rhoN = 5.0;
+	double rhoN = 10;
 	rho[0] = rho0;
 
 	double h = (rhoN-rho0)/(N+1.0); // Steplength
@@ -137,7 +137,7 @@ int main(){
 
 	// Write eigenvectors to file
 	ofstream myfile;
-	myfile.open("eigvecs.txt");
+	myfile.open("eigvecs10.txt");
 	for (int i = 0; i < N; i++){
 		myfile << pow(R[i][index0],2) << "   " << pow(R[i][index1],2) << "   " << pow(R[i][index2],2) << endl;
 	}

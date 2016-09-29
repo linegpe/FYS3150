@@ -15,11 +15,7 @@ for line in lines:
 f.close()
 
 N = len(r1)
-rho = np.linspace(0,5,N)
-
-
-plt.rc('text', usetex=True)
-plt.rc('font', family='serif')
+rho = np.linspace(0,10,N)
 
 fig = plt.figure()
 
@@ -30,24 +26,25 @@ plt.legend()
 fig2 = fig.add_subplot(312)
 fig2.plot(rho,r2,label='2nd eigenvector', color='fuchsia')
 
-plt.show(block=False)
+#plt.show(block=False)
 
 plt.legend()
-plt.ylabel('Probability $|R(r)|$', fontsize=15)
+plt.ylabel(r'Probability $|\psi(\rho)|^2$', fontsize=15)
 
 fig3 = fig.add_subplot(313)
 fig3.plot(rho,r3,label='3rd eigenvector', color='violet')
 plt.legend()
-plt.xlabel('Distance $ \\rho $', fontsize=15)
+plt.xlabel(r'Distance $\rho$', fontsize=15)
 
 
-show = raw_input("Show figure now? [y/n] ")
-if show == "y":
+s = raw_input("Show figure now? [y/n] ")
+if s == "y":
 	plt.show(block=False)
+	plt.show()
+else: 
+	save = raw_input("Do you wish to save the figure? [y/n] ")
+	if save == "y":
+		filename = raw_input("Filename (with .png, .jpg etc): ")
+		plt.savefig(filename)
 
-save = raw_input("Do you wish to save the figure? [y/n] ")
-if save == "y":
-	filename = raw_input("Filename (with .png, .jpg etc): ")
-	plt.savefig(filename)
-
-plt.show()
+#plt.show()
