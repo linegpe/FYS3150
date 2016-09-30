@@ -15,7 +15,7 @@ int main(){
 	double mass = 0.5e6;	//eV/c^2
 	double hbar = 1240;		//eVnm/c^2
 	double beta_e2 = 1.44; 	//eVnm
-	double omega2 = 5.0; 		
+	double omega2 = 1.0; 		
 		
 	double konst = mass*omega2;
 
@@ -32,7 +32,7 @@ int main(){
 	
 	for (int i = 0; i < N+1; i++){
 		rho[i] = rho0 + i*h;
-		V[i] = rho[i]*rho[i]*omega2 + 1.0/rho[i];
+		V[i] = rho[i]*rho[i]*omega2; // Non-interacting + 1.0/rho[i];
 	}
 
 	cout << endl;
@@ -139,7 +139,7 @@ int main(){
 	}
 
 	ofstream myfile;
-	myfile.open("eigvecs2_omega_5.txt");
+	myfile.open("nonint_omega_1.txt");
 	for (int i = 0; i < N; i++){
 		myfile << pow(R[i][index0],2) << "   " << pow(R[i][index1],2) << "   " << pow(R[i][index2],2) << endl;
 	}
