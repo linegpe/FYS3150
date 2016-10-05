@@ -26,9 +26,8 @@ void System::computeForces() {
      * loop.
      */
 
-    // Reset all forces, if wanted: (?)
-    //resetAllForces();
-    //m_potential->resetPotentialEnergy();
+    resetAllForces();
+    m_potential->resetPotentialEnergy();
 
     // General expression for force between two particles:
     //F = G * M1 * M2 / r^2
@@ -36,6 +35,13 @@ void System::computeForces() {
 //    for (int i = 0; i < N; i++){
 //        force[i] = G*M_sun*M_earth/(r_sun_earth*r_sun_earth);
 //    }
+    int N = 100;
+    for (int i=0; i < N; i++){
+        for (int j = i+1; j < N; j++){
+            Particle *i =
+            m_potential->computeForces(m_particles.at(i), m_particles.at(j));
+        }
+    }
 
 }
 
@@ -92,7 +98,17 @@ double System::computeKineticEnergy() {
      * Remember also that the Particle class has a built in method
      * Particle::velocitySquared which can be used here.
      */
+    int N = 100;
+
     m_kineticEnergy = 0;
+    for (int i = 0; i < particles.size(); i++){
+        //addParticle(Particle* i);
+        double mass = m_particles.at(i)->getMass();
+        vec3 v = m_particles.at(i)->getVelocity();
+        m_kineticEnergy += 0.5*mass*Particle::velocitySquared;
+    }
+
+    //m_kineticEnergy = 0;
     return m_kineticEnergy;
 }
 
