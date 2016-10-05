@@ -53,7 +53,7 @@ for line in lines:
 fn0_01.close()
 
 N = len(noint)
-rho = np.linspace(0,10,N)
+rho = np.linspace(0,40,N)
 
 #plt.plot(rho,noint,label="No interaction")
 plt.plot(rho,omega01,label=r"Interacting case, $\omega$ = 0.01")
