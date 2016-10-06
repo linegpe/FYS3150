@@ -29,12 +29,7 @@ void NewtonianGravity::computeForces(Particle& a, Particle& b) {
      * is only neccessary for verification purposes later.
      */
 
-    // ...
-    //m_potentialEnergy += V;
-    //a.addForce(dFx, dFy, dFz);
-    //b.addForce(...);
-
-    double G = 0.0;
+    double G = m_G;
 
     double mass_a = a.getMass();
     double mass_b = b.getMass();
@@ -42,21 +37,26 @@ void NewtonianGravity::computeForces(Particle& a, Particle& b) {
     vec3 poss_a = a.getPosition();
     vec3 poss_b = b.getPosition();
 
-    double r_x = (poss_a(0) - poss_b(0));
-    double r_y = (poss_a(1) - poss_b(1));
-    double r_z = (poss_a(2) - poss_b(2));
+    double r_x = poss_a(0) - poss_b(0);
+    double r_y = poss_a(1) - poss_b(1);
+    double r_z = poss_a(2) - poss_b(2);
 
     double r = sqrt(r_x*r_x + r_y*r_y + r_z*r_z);
 
-    double F_ax = G*mass_a*mass_b*r_x/(r*r*r);
-    double F_ay = G*mass_a*mass_b*r_y/(r*r*r);
+    double F_ax =  -G*mass_a*mass_b*r_x/(r*r*r);
+    double F_ay =  -G*mass_a*mass_b*r_y/(r*r*r);
+
+
+
     double F_bx = - F_ax;
-    double F_by = - F_by;
+    double F_by = - F_ay;
 
     a.addForce(F_ax,F_ay,0);
     b.addForce(F_bx,F_by,0);
 
     //double V = 1.0;
+
+    m_potentialEnergy += mass_a*mass_b*G/(r*r);
     //m_potentialEnergy += V;
 
 }

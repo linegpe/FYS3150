@@ -4,9 +4,15 @@
 #include "InitialConditions/initialcondition.h"
 #include "particle.h"
 
+#include "Potentials/newtoniangravity.h"
+#include "vec3.h"
+
 #include <iostream>
+#include <iomanip>
 using std::cout;
 using std::endl;
+
+
 
 
 
@@ -29,17 +35,11 @@ void System::computeForces() {
     resetAllForces();
     m_potential->resetPotentialEnergy();
 
-    // General expression for force between two particles:
-    //F = G * M1 * M2 / r^2
-//    int N = 5000;
-//    for (int i = 0; i < N; i++){
-//        force[i] = G*M_sun*M_earth/(r_sun_earth*r_sun_earth);
-//    }
-    int N = 100;
-    for (int i=0; i < N; i++){
-        for (int j = i+1; j < N; j++){
-            Particle *i =
-            m_potential->computeForces(m_particles.at(i), m_particles.at(j));
+    //int N = 100;
+    for (int i=0; i < m_numberOfParticles; i++){
+        for (int j = i+1; j < m_numberOfParticles; j++){
+            //Particle *i =
+            m_potential->computeForces(*m_particles.at(i), *m_particles.at(j));
         }
     }
 
@@ -98,14 +98,14 @@ double System::computeKineticEnergy() {
      * Remember also that the Particle class has a built in method
      * Particle::velocitySquared which can be used here.
      */
-    int N = 100;
 
     m_kineticEnergy = 0;
-    for (int i = 0; i < particles.size(); i++){
+    for (int i = 0; i < 2; i++){ //2 = antall partikler
         //addParticle(Particle* i);
-        double mass = m_particles.at(i)->getMass();
-        vec3 v = m_particles.at(i)->getVelocity();
-        m_kineticEnergy += 0.5*mass*Particle::velocitySquared;
+        Particle* p = m_particles.at(i);
+        double mass = p->getMass();
+//        vec3 v = p->getVelocity();
+        m_kineticEnergy += 0.5*mass*p->velocitySquared();
     }
 
     //m_kineticEnergy = 0;
@@ -171,6 +171,14 @@ void System::writePositionsToFile() {
      *
      * Which format you choose for the data file is up to you.
      */
+
+    for (int i=0; i<m_numberOfParticles; i++){
+        Particle* p = m_particles.at(i);
+        vec3 position_p = p->getPosition();
+        double x = position_p.x();
+        double y = position_p.y();
+        m_outFile << x << " " << y << endl;
+    }
 }
 
 void System::closeOutFile() {

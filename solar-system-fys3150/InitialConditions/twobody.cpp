@@ -25,6 +25,7 @@ void TwoBody::setupParticles(System &system) {
      */
 
     // Making the earth and sun:
+    //Particle* Earth = new Particle(vec3(9.779167444303752E-01, 2.272281606873612E-01, 0.0), vec3(-4.140900006551348E-03, 1.671297229409165E-02, 0.0)*365, 3e-06);
     Particle* Earth = new Particle(vec3(1,0,0), vec3(0,1,0), 0.1);
     Particle* Sun = new Particle(vec3(0,0,0), vec3(0,0,0), 1.0);
 

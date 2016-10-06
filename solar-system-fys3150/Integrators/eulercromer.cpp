@@ -8,16 +8,10 @@ EulerCromer::EulerCromer(System* system)
 }
 
 void EulerCromer::integrateOneStep(std::vector<Particle*> particles) {
-//void EulerCromer__integrateOneStep(std::vector<Earth*> particles){
     m_system->computeForces();
     for (int i=0; i<particles.size(); i++) {
-        //std::cout << particles.size() << std::endl;
         Particle *p = particles.at(i);
-//        vec3 v = p->getVelocity();
-//        vec3 P = p->getPosition();
         vec3 F = p->getForce();
-//        vec3 v = p->getVelocity();
-        //std::cout << p->getPosition() << " particle p wha?" << std::endl;
 
 
 
@@ -37,9 +31,7 @@ void EulerCromer::integrateOneStep(std::vector<Particle*> particles) {
 
         // Forward-Euler:
 
-
-        //vec3 a = vec3 (dFx/m, dFy/m, dFz/m);
-        p->getVelocity() += (vec3(m_dt*F(0)/p->getMass(),m_dt*F(1)/p->getMass(),0));
+        p->getVelocity() += (F/p->getMass())*m_dt; //(vec3(m_dt*F(0)/p->getMass(),m_dt*F(1)/p->getMass(),0));
         p->getPosition() += m_dt*p->getVelocity();
 
     }
