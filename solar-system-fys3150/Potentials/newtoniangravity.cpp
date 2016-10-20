@@ -45,14 +45,16 @@ void NewtonianGravity::computeForces(Particle& a, Particle& b) {
 
     double F_ax =  -G*mass_a*mass_b*r_x/(r*r*r);
     double F_ay =  -G*mass_a*mass_b*r_y/(r*r*r);
+    double F_az =  -G*mass_a*mass_b*r_z/(r*r*r);
 
 
 
     double F_bx = - F_ax;
     double F_by = - F_ay;
+    double F_bz = - F_az;
 
-    a.addForce(F_ax,F_ay,0);
-    b.addForce(F_bx,F_by,0);
+    a.addForce(F_ax,F_ay,F_az);
+    b.addForce(F_bx,F_by,F_bz);
 
     //double V = 1.0;
 

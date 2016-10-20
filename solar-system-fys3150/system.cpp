@@ -35,14 +35,11 @@ void System::computeForces() {
     resetAllForces();
     m_potential->resetPotentialEnergy();
 
-    //int N = 100;
     for (int i=0; i < m_numberOfParticles; i++){
         for (int j = i+1; j < m_numberOfParticles; j++){
-            //Particle *i =
             m_potential->computeForces(*m_particles.at(i), *m_particles.at(j));
         }
     }
-
 }
 
 void System::resetAllForces() {
@@ -100,7 +97,7 @@ double System::computeKineticEnergy() {
      */
 
     m_kineticEnergy = 0;
-    for (int i = 0; i < 2; i++){ //2 = antall partikler
+    for (int i = 0; i < m_numberOfParticles; i++){
         //addParticle(Particle* i);
         Particle* p = m_particles.at(i);
         double mass = p->getMass();
@@ -160,7 +157,7 @@ void System::setFileWriting(bool writeToFile) {
 
 void System::writePositionsToFile() {
     if (m_outFileOpen == false) {
-        m_outFile.open("positions.dat", std::ios::out);
+        m_outFile.open(m_filename, std::ios::out);
         m_outFileOpen = true;
     }
     /*
@@ -177,6 +174,7 @@ void System::writePositionsToFile() {
         vec3 position_p = p->getPosition();
         double x = position_p.x();
         double y = position_p.y();
+        //m_outFile << m_numberOfParticles << endl;
         m_outFile << x << " " << y << endl;
     }
 }
