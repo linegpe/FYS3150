@@ -23,6 +23,6 @@ void VelocityVerlet::integrateOneStep(std::vector<Particle*> particles) {
         vec3 new_acceleration = p->getForce()/p->getMass();
         p->getVelocity() += dtOver2*(acceleration + new_acceleration);
     }
-
-
 }
+
+

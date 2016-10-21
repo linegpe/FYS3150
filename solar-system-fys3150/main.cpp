@@ -1,3 +1,5 @@
+//#ifndef CATCH_CONFIG_MAIN
+
 #include <iostream>
 #include <cmath>
 #include "examples.h"
@@ -9,10 +11,10 @@ int main(int, char**) {
     start = clock();
 
     //Examples::twoBodyProblem();
-    Examples::threeBodyProblem();
+    //Examples::threeBodyProblem();
     //Examples::planetaryProblem();
     //Examples::EarthMoonProblem();
-    //Examples::relativisticProblem();
+    Examples::relativisticProblem();
 
     // Timing finished
     finish = clock();
@@ -22,3 +24,5 @@ int main(int, char**) {
 
     return 0;
 }
+
+//#endif
