@@ -17,18 +17,20 @@
 
 void Examples::twoBodyProblem() {
     double G = 4*M_PI*M_PI; //6.67e-11;
+    long int N = 1e11;
 
     System* twoBodySystem = new System();
     twoBodySystem->setFileName          ("twobody.dat");
-    //twoBodySystem->setIntegrator        (new EulerCromer(twoBodySystem));
-    VelocityVerlet *integrator = new VelocityVerlet(twoBodySystem);
-    integrator->setDt(1e-3);
-    twoBodySystem->setIntegrator        (integrator);
+    twoBodySystem->setIntegrator        (new EulerCromer(twoBodySystem));
+    //VelocityVerlet *integrator = new VelocityVerlet(twoBodySystem);
+    //integrator->setDt                   (1e-3);
+    //twoBodySystem->setIntegrator        (integrator);
     twoBodySystem->setPotential         (new NewtonianGravity(G));
     twoBodySystem->setInitialCondition  (new TwoBody());
     twoBodySystem->setFileWriting       (true);
     twoBodySystem->removeLinearMomentum ();
-    twoBodySystem->integrate            (20000);
+    twoBodySystem->integrate            (5000);
+    //twoBodySystem->perihelion          (N);
 }
 
 void Examples::threeBodyProblem() {
@@ -45,7 +47,7 @@ void Examples::threeBodyProblem() {
     threeBodySystem->setInitialCondition  (new ThreeBody());
     threeBodySystem->setFileWriting       (true);
     threeBodySystem->removeLinearMomentum ();
-    threeBodySystem->integrate            (5000);
+    threeBodySystem->integrate            (13000);
 
 }
 
@@ -59,7 +61,7 @@ void Examples::EarthMoonProblem() {
     EarthMoonSystem->setInitialCondition  (new EarthMoon());
     EarthMoonSystem->setFileWriting       (true);
     EarthMoonSystem->removeLinearMomentum ();
-    EarthMoonSystem->integrate            (200000);
+    EarthMoonSystem->integrate            (5000);
 }
 
 void Examples::planetaryProblem() {
@@ -80,16 +82,17 @@ void Examples::planetaryProblem() {
 
 void Examples::relativisticProblem() {
     double G = 4*M_PI*M_PI;
+    long int N = 1e11;
 
     System* relativisticSystem = new System();
     relativisticSystem->setFileName         ("relativistic_update.dat");
     VelocityVerlet *integrator = new VelocityVerlet(relativisticSystem);
-    integrator->setDt(1e-6);
+    //integrator->setDt(1e-8);
     relativisticSystem->setIntegrator       (integrator);
     relativisticSystem->setPotential        (new RelativisticGravity(G));
     relativisticSystem->setInitialCondition (new Relativistic());
     relativisticSystem->setFileWriting      (true);
     relativisticSystem->removeLinearMomentum();
     //relativisticSystem->integrate           (10000000);
-    relativisticSystem->perihelion          (100000000);
+    relativisticSystem->perihelion          (N);
 }

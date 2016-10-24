@@ -8,7 +8,7 @@ void TwoBody::setupParticles(System &system) {
 
     // For running the sun-earth model
 
-    Particle* Earth = new Particle(vec3(1,0,0), vec3(0,2*sqrt(2)*M_PI,0), 3e-6);  // Velocity: vec3(0,2*M_PI,0)
+    Particle* Earth = new Particle(vec3(1,0,0), vec3(0,2*M_PI,0), 3e-6);  // Velocity: vec3(0,2*M_PI,0)
     Particle* Sun = new Particle(vec3(0,0,0), vec3(0,0,0), 1.0);
 
     system.addParticle(Earth);

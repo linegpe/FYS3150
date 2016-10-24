@@ -17,7 +17,7 @@ neptune = data[8::nrPlanets]
 luna = data[9::nrPlanets]
 
 
-plt.plot(sun[:,0],sun[:,1],'o',label="Sun")
+plt.plot(sun[:,0],sun[:,1],'yo',label="Sun")
 plt.plot(mercury[:,0],mercury[:,1],label="Mercury")
 plt.plot(venus[:,0],venus[:,1],label="Venus")
 plt.plot(earth[:,0],earth[:,1],label="Earth")
@@ -32,5 +32,6 @@ plt.xlabel("Position in x-direction",fontsize=15)
 plt.ylabel("Position in y-direction",fontsize=15)
 plt.axis([-35,60,-35,35])
 
-plt.legend()
+plt.axis("equal")
+plt.legend(numpoints=1)
 plt.show()

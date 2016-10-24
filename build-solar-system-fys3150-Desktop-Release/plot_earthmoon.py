@@ -3,7 +3,7 @@ import numpy as np
 
 nrPlanets = 3
 
-data = np.loadtxt("earthmoon.dat")
+data = np.loadtxt("earthmoon.dat") # earthmoon.dat
 
 sun = data[0::nrPlanets]
 earth = data[1::nrPlanets]
@@ -19,5 +19,6 @@ print luna
 plt.plot(luna[:,0]-earth[:,0],luna[:,1]-earth[:,1])
 plt.xlabel("Distance, x-direction [AU]", fontsize=15)
 plt.ylabel("Distance, y-direction [AU]", fontsize=15)
+plt.axis("equal")
 plt.legend()
 plt.show()

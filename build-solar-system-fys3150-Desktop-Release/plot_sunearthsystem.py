@@ -26,8 +26,11 @@ f.close()
 N = len(x_earth)
 
 plt.plot(x_earth,y_earth,label="Earth")
-plt.plot(x_sun, y_sun,'o',label="Sun")
-plt.legend()
+plt.plot(x_sun, y_sun,'yo',label="Sun")
+plt.legend(numpoints=1)
+plt.xlabel("Position in x-direction",fontsize=15)
+plt.ylabel("Position in y-direction",fontsize=15)
 #plt.axis([-1.1,1.1,-1.1,1.1])
+plt.axis("equal")
 plt.show()
 

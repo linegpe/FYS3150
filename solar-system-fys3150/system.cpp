@@ -19,21 +19,6 @@ using std::setprecision;
 
 
 void System::computeForces() {
-    /*
-     * Here you should sum over all particle pairs and compute the forces
-     * between each one. This should be done by the Potential::computeForces
-     * method which takes pointers to two Particles as input. I.e. the forces
-     * between particle i and particle j should be computed by
-     *
-     *      m_potential->computeForces(m_particles.at(i), m_particles.at(j));
-     *
-     * Note: It is important that you do not sum over each particle pair more
-     * than once. A simple way to ensure this is done is by a double foor loop,
-     * one running from i=0...n, and the other running from j=i+1...n. You
-     * should convince yourself that this is true before you implement this
-     * loop.
-     */
-
     resetAllForces();
     m_potential->resetPotentialEnergy();
 
@@ -197,9 +182,12 @@ double rPreviousPrevious 	= 0;	// Mercury-Sun-distance two times steps ago.
 double rPrevious            = 0;	// Mercury-Sun-distance of the previous time step.
 double rCurrent             = 0;	// Mercury-Sun-distance of the current time step.
 
-m_outFile.open("perihelion.dat");
+m_outFile.open("perihelion_nonrel.dat");
 // This is the integration loop, in which you advance the solution (usually via a integrateOneStep()
 // function located in an integrator object, e.g. the Verlet class).
+
+int year = 0;
+
 for (int timeStep = 0; timeStep < numberOfTimeSteps; timeStep++) {
 
     // Integrate the solution one step forward in time, using the GR corrected force calcuation
@@ -219,11 +207,14 @@ for (int timeStep = 0; timeStep < numberOfTimeSteps; timeStep++) {
     // Check if the *previous* time step was a minimum for the Mercury-Sun distance. I.e. check
     // if the previous distance is smaller than the current one *and* the previous previous one.
     //cout << rCurrent << endl;
+    //cout << "Calculating angle... " << endl;
+
     if ( rCurrent > rPrevious && rPrevious < rPreviousPrevious ) {
-
         // If we are perihelion, print angle (in radians) to terminal.
+        cout << "Year " << year << endl;
         m_outFile << thetaPrevious << endl;
-
+        year += 1;
+        //cout << thetaPrevious*3600*180/M_PI << endl;
         // Here you should also probably write it to file for later plotting or something.
     }
 

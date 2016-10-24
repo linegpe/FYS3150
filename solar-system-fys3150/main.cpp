@@ -10,11 +10,11 @@ int main(int, char**) {
     clock_t start, finish;
     start = clock();
 
-    //Examples::twoBodyProblem();
+    Examples::twoBodyProblem();
     //Examples::threeBodyProblem();
     //Examples::planetaryProblem();
     //Examples::EarthMoonProblem();
-    Examples::relativisticProblem();
+    //Examples::relativisticProblem();
 
     // Timing finished
     finish = clock();

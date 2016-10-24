@@ -32,6 +32,7 @@ public:
     void addParticle            (Particle* p);
     void printIntegrateInfo     (int stepNumber);
     void removeLinearMomentum   ();
+    void computeAngularMomentum (Particle a, Particle b);
     void setFileWriting         (bool writeToFile);
     void writePositionsToFile   ();
     void closeOutFile           ();
