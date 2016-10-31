@@ -3,10 +3,10 @@ import numpy as np
 
 nrPlanets = 2
 
-#data = np.loadtxt("toolow.dat")
+data = np.loadtxt("toolow.dat")
 
-#earth = data[0::nrPlanets]
-#sun = data[1::nrPlanets]
+earth = data[0::nrPlanets]
+sun = data[1::nrPlanets]
 
 data2 = np.loadtxt("toohigh.dat")
 earth2 = data2[0::nrPlanets]
