@@ -73,57 +73,6 @@ double calculateEnergy(int size, double J, double **spinMatrix){
 							+ spinMatrix[i][j]*spinMatrix[i][down]
 							+ spinMatrix[i][j]*spinMatrix[left][j] 
 							+ spinMatrix[i][j]*spinMatrix[right][j];
-
-
-/*			if((i+1) < L && (j+1) < L && (i-1) >= 0 && (j-1) >= 0) {
-				cout << "uh oh" << endl;
-				mean_energy += spinMatrix[i][j]*spinMatrix[i+1][j];
-				mean_energy += spinMatrix[i][j]*spinMatrix[i][j+1];
-				mean_energy += spinMatrix[i][j]*spinMatrix[i-1][j];
-				mean_energy += spinMatrix[i][j]*spinMatrix[i][j-1];
-			} else {
-
-/*				if(i-1 < 0 && j-1 > 0) {
-					mean_energy += spinMatrix[i][j]*spinMatrix[L-1][j];
-					mean_energy += spinMatrix[i][j]*spinMatrix[i][j-1];
-					mean_energy += spinMatrix[i][j]*spinMatrix[i+1][j];
-					mean_energy += spinMatrix[i][j]*spinMatrix[i][j+1];
-				}
-				mean_energy += spinMatrix[i][j]*spinMatrix[1][j];
-				mean_energy += spinMatrix[i][j]*spinMatrix[i][1];
-				
-				mean_energy += spinMatrix[i][j]*spinMatrix[i][L-1];
-			// Corners:
-			// Corner 1:
-				if (i-1 < 0 && j-1 <0){
-					mean_energy += spinMatrix[0][0]*spinMatrix[0][1];
-					mean_energy += spinMatrix[0][0]*spinMatrix[1][0];
-					mean_energy += spinMatrix[0][0]*spinMatrix[0][L-1];
-					mean_energy += spinMatrix[0][0]*spinMatrix[L-1][0];
-				}
-			// Corner 2:
-				else if (i-1 < 0 && j+1 > L-1){
-					mean_energy += spinMatrix[0][L-1]*spinMatrix[0][0];
-					mean_energy += spinMatrix[0][L-1]*spinMatrix[1][L-1];
-					mean_energy += spinMatrix[0][L-1]*spinMatrix[L-1][L-1];
-					mean_energy += spinMatrix[0][L-1]*spinMatrix[0][L-2];
-				}
-			// Corner 3:
-				else if (i > L-2 && j-1 < 0){
-					mean_energy += spinMatrix[L-1][0]*spinMatrix[L-2][0];
-					mean_energy += spinMatrix[L-1][0]*spinMatrix[L-1][1];
-					mean_energy += spinMatrix[L-1][0]*spinMatrix[L-1][L-1];
-					mean_energy += spinMatrix[L-1][0]*spinMatrix[0][0];
-				}
-			// Corner 4:
-				else if (i > L-2 && j > L-2){
-					mean_energy += spinMatrix[L-1][L-1]*spinMatrix[L-1][L-2];
-					mean_energy += spinMatrix[L-1][L-1]*spinMatrix[L-2][L-1];
-					mean_energy += spinMatrix[L-1][L-1]*spinMatrix[L-1][0];
-					mean_energy += spinMatrix[L-1][L-1]*spinMatrix[0][L-1];
-				}
-			} 
-			//mean_energy *= (-J/2.0);*/
 		}
 	}
 	return J*mean_energy/2.;
@@ -235,5 +184,3 @@ void printResults(double N, double energy, double magnetization, double cv, doub
 	cout << "  o  Heat capacity:            " << cv << endl;
 	cout << "  o  Magnetic susceptibility   " << chi << endl;
 }
-
-//print "i = %-10.3d" % i
