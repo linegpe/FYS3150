@@ -14,6 +14,7 @@ double calculateMagnetization(int L, double **spinMatrix);
 void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, int N, double J, double** spinMatrix);
 void printResults(double N, double energy, double magnetization, double cv, double chi);
 double** createRandomMatrix(int L);
+double** createOrderedMatrix(int L);
 
 
 int main(){
@@ -22,7 +23,7 @@ int main(){
 	int nr_spins = L*L;
 	double nr_microstates = pow(2,nr_spins);
 	double J = 1.0;
-	int N = 1e5; // Number of Monte Carlo Cycles
+	int N = 100; // Number of Monte Carlo Cycles
 
 	// Spin matrix
 	double **spins = new double*[L];
@@ -35,10 +36,12 @@ int main(){
 			spins[i][j] = 1;
 		}
 	}
+	//double** A = createRandomMatrix(3);
+	double** A = createOrderedMatrix(3);
+	printSpinMatrix(3,A);
+
 	//createRandomSpins(L,spins);
-
 	//double** spins = createRandomMatrix(L);
-
 	//int total_spin = 0;
 	srand (time(NULL));
 	double E, M, cv, chi;
@@ -108,7 +111,33 @@ double** createRandomMatrix(int L){
 	for (int i = 0; i < L; i++){
 		spins[i] = new double[L];
 	}
-	createRandomSpins(L,spins);
+	// createRandomSpins(L,spins)
+	for (int i = 0; i < L; i++){
+		for (int j = 0; j < L; j++){
+			int x = rand() % 2;
+			
+			if(x == 1) {
+				spins[i][j] =  1;
+			} else {
+				spins[i][j] = -1;
+			}
+			
+		}
+	}
+	return spins;
+}
+
+double** createOrderedMatrix(int L){
+	double **spins = new double*[L];
+	for (int i = 0; i < L; i++){
+		spins[i] = new double[L];
+	}
+	for (int i = 0; i < L; i++){
+		for (int j = 0; j < L; j++){
+			spins[i][j] = 1;
+		}
+	}
+	return spins;
 }
 
 void printSpinMatrix(int L, double** spins) {
@@ -123,7 +152,7 @@ void printSpinMatrix(int L, double** spins) {
 void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, int N, double J, double** spinMatrix){
 	// Wirte to file
 	ofstream myfile; 
-	myfile.open("expect_T2_4.dat");
+	myfile.open("test.dat");
 	// Calculate current energy
 	double energy = calculateEnergy(L,J,spinMatrix);
 	double magnetizationSum = 0;
@@ -132,8 +161,9 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 	double eSquaredSum = 0;
 	double mSquaredSum = 0;
 	int n = 0;
-	double T = 2.4;
+	double T = 1.0;
 	double beta = 1./T;
+	int accepted = 0;
 	while (n < N){
 		// Pick one random spin
 		int i = rand() % L; 
@@ -148,6 +178,7 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 			energy = new_energy;
 			magnetization = calculateMagnetization(L,spinMatrix);
 			mSquaredSum += magnetization*magnetization;
+			accepted += 1;
 		} else { 
 			double w = exp(-beta*dE);
 			double max = RAND_MAX;
@@ -155,6 +186,7 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 			if (r < w){
 				energy = new_energy;
 				magnetization = calculateMagnetization(L,spinMatrix);
+				accepted += 1;
 			} else {
 				spinMatrix[i][j] *= (-1);
 			}
@@ -165,7 +197,8 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 		mSquaredSum += magnetization*magnetization;
 		n += 1;
 
-		myfile << energySum/((double)n*L*L) << " " << abs(magnetizationSum/((double) n*L*L)) << endl;
+		myfile << accepted << endl;
+		//myfile << energySum/((double)n*L*L) << " " << abs(magnetizationSum/((double) n*L*L)) << endl;
 	}
 	E = energySum/N;
 	M = magnetizationSum/N;
@@ -178,9 +211,10 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 }
 
 void printResults(double N, double energy, double magnetization, double cv, double chi){
-	cout << "After " << N << " loops, the results are:" << endl;
+	cout << endl;
+	cout << "After " << N << " loops, the results are:" << endl << endl;
 	cout << "  o  Mean energy:              " << energy << endl;
 	cout << "  o  Mean magnetization:       " << magnetization << endl;
 	cout << "  o  Heat capacity:            " << cv << endl;
-	cout << "  o  Magnetic susceptibility   " << chi << endl;
+	cout << "  o  Magnetic susceptibility   " << chi << endl << endl;
 }
