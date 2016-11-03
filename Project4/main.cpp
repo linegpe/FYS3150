@@ -1,3 +1,4 @@
+#include <mpi.h>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -11,42 +12,45 @@ void printSpinMatrix(int L, double** spins);
 void createRandomSpins(int L, double **spins);
 double calculateEnergy(int size, double J, double** spinMatrix);
 double calculateMagnetization(int L, double **spinMatrix);
-void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, int N, double J, double** spinMatrix);
-void printResults(double N, double energy, double magnetization, double cv, double chi);
+void metropolisAlgorithm(double T, double& E, double& M, double& E2, double& M2, double& cv, double& chi, int L, int N, double J, double** spinMatrix);
+void printResults(double L, double T, double N, double energy, double E2, double M2, double magnetization, double cv, double chi);
 double** createRandomMatrix(int L);
 double** createOrderedMatrix(int L);
+//void writeResultToFile(string myfile, double T, double E, double M, double E2, double M2, double cv, double chi);
 
 
-int main(){
-	double temp = 1.0;
+int main(int nargs, char* args[]){
+	//double temp = 1.0;
 	int L = 20;
-	int nr_spins = L*L;
-	double nr_microstates = pow(2,nr_spins);
 	double J = 1.0;
-	int N = 100; // Number of Monte Carlo Cycles
+	int N = 1e6; // Number of Monte Carlo Cycles
 
-	// Spin matrix
-	double **spins = new double*[L];
-	for (int i = 0; i < L; i++){
-		spins[i] = new double[L];
-	}
+	double** spins = createRandomMatrix(L);
+	//double** spins = createOrderedMatrix(L);
 
-	for (int i = 0; i < L; i++){
-		for (int j = 0; j < L; j++){
-			spins[i][j] = 1;
+	int numprocs, my_rank;
+    MPI_Init (&nargs, &args);
+    MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
+
+    //MPI_Reduce(&local_sum, &total_sum, 1, MPI_Double, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    for (double temp = 2.0; temp <= 2.3; temp += 0.05){
+		srand (time(NULL));
+		double E, M, E2, M2, cv, chi;
+		double total_E = 0; 
+		double total_M = 0;
+		double total_E2 = 0;
+		double total_M2 = 0;
+		double total_cv = 0;
+		double total_chi = 0;
+		metropolisAlgorithm(temp, E, M, E2, M2, cv, chi, L, N, J, spins);
+		MPI_Reduce(&E, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		if (my_rank == 0){
+			printResults(L,temp,N*numprocs,total_E,M,E2,M2,cv,chi);
 		}
 	}
-	//double** A = createRandomMatrix(3);
-	double** A = createOrderedMatrix(3);
-	printSpinMatrix(3,A);
-
-	//createRandomSpins(L,spins);
-	//double** spins = createRandomMatrix(L);
-	//int total_spin = 0;
-	srand (time(NULL));
-	double E, M, cv, chi;
-	metropolisAlgorithm(E, M, cv, chi, L, N, J, spins);
-	printResults(N,E,M,cv,chi);
+	MPI_Finalize();
 	return 0;
 }
 
@@ -61,16 +65,15 @@ double calculateEnergy(int size, double J, double **spinMatrix){
 	for (int i = 0; i < L; i++){
 		for (int j = 0; j < L; j++){
 
-
 			int up = j+1;
 			int down = j-1;
 			int left = i-1;
 			int right = i+1;
 
 			if (i == L-1) right = 0;
-			if (i == 0) left = L-1;
+			if (i == 0)   left = L-1;
 			if (j == L-1) up = 0;
-			if (j == 0) down = L-1;
+			if (j == 0)   down = L-1;
 
 			mean_energy += spinMatrix[i][j]*spinMatrix[i][up] 
 							+ spinMatrix[i][j]*spinMatrix[i][down]
@@ -88,7 +91,7 @@ double calculateMagnetization(int L, double **spinMatrix){
 			magnetization += spinMatrix[i][j];
 		}
 	}
-	return abs(magnetization);
+	return magnetization;
 }
 
 void createRandomSpins(int L, double **spins){
@@ -111,7 +114,6 @@ double** createRandomMatrix(int L){
 	for (int i = 0; i < L; i++){
 		spins[i] = new double[L];
 	}
-	// createRandomSpins(L,spins)
 	for (int i = 0; i < L; i++){
 		for (int j = 0; j < L; j++){
 			int x = rand() % 2;
@@ -121,7 +123,6 @@ double** createRandomMatrix(int L){
 			} else {
 				spins[i][j] = -1;
 			}
-			
 		}
 	}
 	return spins;
@@ -149,19 +150,18 @@ void printSpinMatrix(int L, double** spins) {
 	}
 }
 
-void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, int N, double J, double** spinMatrix){
+void metropolisAlgorithm(double T, double& E, double& M, double& E2, double& M2, double& cv, double& chi, int L, int N, double J, double** spinMatrix){
 	// Wirte to file
 	ofstream myfile; 
 	myfile.open("test.dat");
 	// Calculate current energy
 	double energy = calculateEnergy(L,J,spinMatrix);
 	double magnetizationSum = 0;
-	double magnetization, E2, M2;
+	double magnetization; //, E2, M2;
 	double energySum = energy;
 	double eSquaredSum = 0;
 	double mSquaredSum = 0;
 	int n = 0;
-	double T = 1.0;
 	double beta = 1./T;
 	int accepted = 0;
 	while (n < N){
@@ -197,24 +197,30 @@ void metropolisAlgorithm(double& E, double& M, double& cv, double& chi, int L, i
 		mSquaredSum += magnetization*magnetization;
 		n += 1;
 
-		myfile << accepted << endl;
-		//myfile << energySum/((double)n*L*L) << " " << abs(magnetizationSum/((double) n*L*L)) << endl;
+		//myfile << accepted << endl;
+		myfile << energySum/((double)n*L*L) << " " << abs(magnetizationSum/((double) n*L*L)) << endl;
 	}
-	E = energySum/N;
-	M = magnetizationSum/N;
-	E2 = eSquaredSum/N;
-	M2 = mSquaredSum/N;
+	E = energySum;
+	M = magnetizationSum;
+	E2 = eSquaredSum;
+	M2 = mSquaredSum;
 	cv = (E2 - E*E)/(T*T);
 	chi = (M2 - M*M)/T;
 
 	myfile.close();
 }
 
-void printResults(double N, double energy, double magnetization, double cv, double chi){
+void printResults(double L, double T, double N, double energy, double magnetization, double E2, double M2, double cv, double chi){
 	cout << endl;
-	cout << "After " << N << " loops, the results are:" << endl << endl;
-	cout << "  o  Mean energy:              " << energy << endl;
-	cout << "  o  Mean magnetization:       " << magnetization << endl;
-	cout << "  o  Heat capacity:            " << cv << endl;
-	cout << "  o  Magnetic susceptibility   " << chi << endl << endl;
+	cout << "After " << N << " loops with temperature " << T <<", the results are:" << endl << endl;
+	cout << "  o  Mean energy:               " << energy/(N*L*L) << endl;
+	cout << "  o  Mean magnetization:        " << magnetization << endl;
+	cout << "  o  Heat capacity:             " << cv << endl;
+	cout << "  o  Magnetic susceptibility    " << chi << endl << endl;
+	cout << "  o  Mean energy squared        " << E2 << endl;
+	cout << "  o  Mean magnetization squared " << M2 << endl;
 }
+
+// void writeResultToFile(string myfile, double T, double E, double M, double E2, double M2, double cv, double chi){
+// 	myfile << T << " " << E << " " << M << " " << E2 << " " << M2 << " " << cv << " " << chi << endl;
+// }
