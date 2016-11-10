@@ -26,9 +26,9 @@ double calculateDE(double **spinMatrix, int i, int j, int L);
 
 
 int main(int nargs, char* args[]){
-	int L = 2;			// Dimension of lattice      //CHANGE
+	int L = 40;			// Dimension of lattice      //CHANGE
 	double J = -1.0;	// Energy constant with unit
-	int N = 1e6; 	// Number of Monte Carlo Cycles  //CHANGE TO 100 000
+	int N = 1e5; 	// Number of Monte Carlo Cycles  //CHANGE TO 100 000
 
 	// Choose random or ordered spin lattice:
 	string initialMode = "random";
@@ -62,10 +62,10 @@ int main(int nargs, char* args[]){
 
     // Write to file to study phase transitions:
 	ofstream myfile;									//UNCOMMENT
-	myfile.open("test.dat");					//UNCOMMENT
+	myfile.open("final2_L040.dat");					//UNCOMMENT
     
     // Begin algorithm:
-    for (double temp = 1.0; temp <= 1.0; temp += 0.1){
+    for (double temp = 2.0; temp <= 2.4; temp += 0.025){
 
     	// Variables to fill with values:
 		double E, M, E2, M2, cv, chi;
@@ -78,17 +78,14 @@ int main(int nargs, char* args[]){
 		// Automatically generated filename of output:
 		sprintf(filename, "expect_%s_T%.2f.dat", initialMode.c_str(), temp);
 		metropolisAlgorithm(numprocs, temp, E, M, E2, M2, cv, chi, L, N, J, spins, string(filename));
-		cout << setprecision(15) << "E: " << E << " " << total_E << endl;
-		printResults(L,temp,N,E/(N*L*L),E2/(N*L*L),M2/(N*L*L), M/(N*L*L),cv,chi); 
-		//printResults(double L, double T, double N, double energy, double E2, double M2, double magnetization, double cv, double chi)
+		//printResults(L,temp,N,E/(N*L*L),E2/(N*L*L),M2/(N*L*L), M/(N*L*L),cv,chi); 
 		MPI_Reduce(&E, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		MPI_Reduce(&M, &total_M, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		MPI_Reduce(&E2, &total_E2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		MPI_Reduce(&M2, &total_M2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-		cout << "Total E: " << total_E << endl;
 		if (my_rank == 0){
 			normalize(numprocs, temp,L,N,total_E,total_E2,total_M,total_M2,cv,chi);
-			//printResults(L,temp,N*numprocs,total_E,total_E2,total_M2,total_M,cv,chi);
+			printResults(L,temp,N*numprocs,total_E*4,total_E2*4,total_M2*4,total_M*4,cv*4,chi*4);
 			myfile << total_E/(L*L) << " " << total_M/(L*L) << " " << cv << " " << chi << " " << temp << endl;	//UNCOMMENT
 		}
 	}
@@ -177,21 +174,20 @@ void printSpinMatrix(int L, double** spins) {
 }
 
 double calculateDE(double **spinMatrix, int i, int j, int L){
-			int up = j+1;
-			int down = j-1;
-			int left = i-1;
-			int right = i+1;
+	int up = j+1;
+	int down = j-1;
+	int left = i-1;
+	int right = i+1;
+	if (i == L-1) right = 0;
+	if (i == 0)   left = L-1;
+	if (j == L-1) up = 0;
+	if (j == 0)   down = L-1;
 
-			if (i == L-1) right = 0;
-			if (i == 0)   left = L-1;
-			if (j == L-1) up = 0;
-			if (j == 0)   down = L-1;
-
-			double dE = 2*(spinMatrix[i][j]*(spinMatrix[i][up] 
-							+spinMatrix[i][down]
-							+spinMatrix[left][j] 
-							+spinMatrix[right][j]));
-			return dE;
+	double dE = 2*(spinMatrix[i][j]*(spinMatrix[i][up] 
+					+spinMatrix[i][down]
+					+spinMatrix[left][j] 
+					+spinMatrix[right][j]));
+	return dE;
 }
 
 void metropolisAlgorithm(int numprocs, double T, double& E, double& M, double& E2, double& M2, double& cv, double& chi, int L, int N, double J, double** spinMatrix, string filename){
@@ -214,18 +210,15 @@ void metropolisAlgorithm(int numprocs, double T, double& E, double& M, double& E
 			// Pick one random spin
 			int i = rand() % L; 
 			int j = rand() % L;
-			// Flip this one and calculate new energy
-			// spinMatrix[i][j] *= (-1);
+			// Calculate hypothetical dE
 			double dE = calculateDE(spinMatrix, i, j, L);
-			//cout << dE << endl;
-			// Calculate dE
-			//double dE = new_energy - energy;
+			magnetization = calculateMagnetization(L,spinMatrix);
 			if (dE <= 0){
 				// Accept new energy
 				energy = energy+dE;
 				magnetization = calculateMagnetization(L,spinMatrix);
 				accepted += 1;
-
+				// Flip spin
 				spinMatrix[i][j] *= (-1);
 			} else { 
 				double w = exp(-beta*dE);
@@ -235,13 +228,10 @@ void metropolisAlgorithm(int numprocs, double T, double& E, double& M, double& E
 					energy = dE + energy;
 					magnetization = calculateMagnetization(L,spinMatrix);
 					accepted += 1;
-
+					// Flip spin
 					spinMatrix[i][j] *= (-1);
-				} else {
-					
 				}
 			}
-			//cout << energy << endl;
 		}
 		energySum += energy;
 		eSquaredSum += energy*energy;
@@ -278,19 +268,18 @@ void printResults(double L, double T, double N, double energy, double E2, double
 }
 
 void normalize(int numprocs, double T, int L, int N, double& E, double& E2, double& M, double& M2, double& cv, double& chi){
-//L = 1;
 	E = E/(numprocs*N);
 	E2 = E2/(numprocs*N);
 	M = M/(numprocs*N);
 	M2 = M2/(numprocs*N);
 	cv = (E2 - E*E)/(T*T);
-	cv /= 1;
+	cv /= L*L;
 	chi = (M2 - M*M)/T;
-	chi /= 1;
+	chi /= L*L;
 	E /= L*L;
 	E2 /= L*L;
 	M /= L*L;
-	M2 /= 1; //L*L;	
+	M2 /= L*L; 	
 
 	cout << setprecision(5) << "  o  Mean energy:               " << E << endl;
 	cout << setprecision(5) << "  o  Mean magnetization:        " << M << endl;
