@@ -26,7 +26,7 @@ double calculateDE(double **spinMatrix, int i, int j, int L);
 
 
 int main(int nargs, char* args[]){
-	int L = 40;			// Dimension of lattice      //CHANGE
+	int L = 60;			// Dimension of lattice      //CHANGE
 	double J = -1.0;	// Energy constant with unit
 	int N = 1e5; 	// Number of Monte Carlo Cycles  //CHANGE TO 100 000
 
@@ -61,11 +61,11 @@ int main(int nargs, char* args[]){
 	//printResults(L,temp,N,E,E2,M2,M,cv,chi);
 
     // Write to file to study phase transitions:
-	ofstream myfile;									//UNCOMMENT
-	myfile.open("final2_L040.dat");					//UNCOMMENT
+	ofstream myfile;								//UNCOMMENT
+	myfile.open("final2_1_L060.dat");					//UNCOMMENT
     
     // Begin algorithm:
-    for (double temp = 2.0; temp <= 2.4; temp += 0.025){
+    for (double temp = 2.0; temp <= 2.4; temp += 0.05){
 
     	// Variables to fill with values:
 		double E, M, E2, M2, cv, chi;
@@ -85,8 +85,8 @@ int main(int nargs, char* args[]){
 		MPI_Reduce(&M2, &total_M2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		if (my_rank == 0){
 			normalize(numprocs, temp,L,N,total_E,total_E2,total_M,total_M2,cv,chi);
-			printResults(L,temp,N*numprocs,total_E*4,total_E2*4,total_M2*4,total_M*4,cv*4,chi*4);
-			myfile << total_E/(L*L) << " " << total_M/(L*L) << " " << cv << " " << chi << " " << temp << endl;	//UNCOMMENT
+			printResults(L,temp,N*numprocs,total_E,total_E2,total_M2,total_M,cv,chi);
+			myfile << total_E << " " << total_M << " " << cv << " " << chi << " " << temp << endl;	//UNCOMMENT
 		}
 	}
 	myfile.close();		//UNCOMMENT
@@ -281,10 +281,10 @@ void normalize(int numprocs, double T, int L, int N, double& E, double& E2, doub
 	M /= L*L;
 	M2 /= L*L; 	
 
-	cout << setprecision(5) << "  o  Mean energy:               " << E << endl;
+/*	cout << setprecision(5) << "  o  Mean energy:               " << E << endl;
 	cout << setprecision(5) << "  o  Mean magnetization:        " << M << endl;
 	cout << setprecision(5) << "  o  Heat capacity:             " << cv << endl;
 	cout << setprecision(5) << "  o  Magnetic susceptibility    " << chi << endl << endl;
 	cout << setprecision(6) << "  o  Mean energy squared        " << E2 << endl;
-	cout << setprecision(6) << "  o  Mean magnetization squared " << M2 << endl;
+	cout << setprecision(6) << "  o  Mean magnetization squared " << M2 << endl;*/
 }
