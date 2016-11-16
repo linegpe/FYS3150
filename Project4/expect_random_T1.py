@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 data1 = np.loadtxt("expect_random_T1.00.dat")
 data2 = np.loadtxt("expect_ordered_T1.00.dat")
-data3 = np.loadtxt("expect_random_T2.40.dat")
-data4 = np.loadtxt("expect_ordered_T2.40.dat")
+data3 = np.loadtxt("expect_random2_T2.40.dat")
+data4 = np.loadtxt("expect_ordered2_T2.40.dat")
 values1 = data1[0::1]
 values2 = data2[0::1]
 values3 = data3[0::1]

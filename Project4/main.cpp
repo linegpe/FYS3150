@@ -26,9 +26,9 @@ double calculateDE(double **spinMatrix, int i, int j, int L);
 
 
 int main(int nargs, char* args[]){
-	int L = 60;			// Dimension of lattice      //CHANGE
+	int L = 60;			// Dimension of lattice  
 	double J = -1.0;	// Energy constant with unit
-	int N = 1e5; 	// Number of Monte Carlo Cycles  //CHANGE TO 100 000
+	int N = 1e5; 		// Number of Monte Carlo Cycles  
 
 	// Choose random or ordered spin lattice:
 	string initialMode = "random";
@@ -50,22 +50,12 @@ int main(int nargs, char* args[]){
 
     // Make pseudo-random numbers as random as possible:
     srand (time(NULL)+my_rank);
-    //srand (time(NULL));
-
-    // For running non-parallelized:
-    //double temp = 1.0;
-	//double E, M, E2, M2, cv, chi;
-	//sprintf(filename, "expect_%s_T%.2f.dat", initialMode.c_str(), temp);
-	//metropolisAlgorithm(temp, E, M, E2, M2, cv, chi, L, N, J, spins, "test");
-
-	//printResults(L,temp,N,E,E2,M2,M,cv,chi);
-
-    // Write to file to study phase transitions:
-	ofstream myfile;								//UNCOMMENT
-	myfile.open("final2_1_L060.dat");					//UNCOMMENT
+    
+	ofstream myfile;								
+	myfile.open("L60.dat");					
     
     // Begin algorithm:
-    for (double temp = 2.0; temp <= 2.4; temp += 0.05){
+    for (double temp = 2.4; temp <= 2.4; temp += 0.1){
 
     	// Variables to fill with values:
 		double E, M, E2, M2, cv, chi;
@@ -77,8 +67,7 @@ int main(int nargs, char* args[]){
 
 		// Automatically generated filename of output:
 		sprintf(filename, "expect_%s_T%.2f.dat", initialMode.c_str(), temp);
-		metropolisAlgorithm(numprocs, temp, E, M, E2, M2, cv, chi, L, N, J, spins, string(filename));
-		//printResults(L,temp,N,E/(N*L*L),E2/(N*L*L),M2/(N*L*L), M/(N*L*L),cv,chi); 
+		metropolisAlgorithm(numprocs, temp, E, M, E2, M2, cv, chi, L, N, J, spins, string(filename)); 
 		MPI_Reduce(&E, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		MPI_Reduce(&M, &total_M, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 		MPI_Reduce(&E2, &total_E2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
@@ -86,10 +75,10 @@ int main(int nargs, char* args[]){
 		if (my_rank == 0){
 			normalize(numprocs, temp,L,N,total_E,total_E2,total_M,total_M2,cv,chi);
 			printResults(L,temp,N*numprocs,total_E,total_E2,total_M2,total_M,cv,chi);
-			myfile << total_E << " " << total_M << " " << cv << " " << chi << " " << temp << endl;	//UNCOMMENT
+			myfile << total_E << " " << total_M << " " << cv << " " << chi << " " << temp << endl;
 		}
 	}
-	myfile.close();		//UNCOMMENT
+	myfile.close();
 	MPI_Finalize();
 	return 0;
 }
@@ -192,9 +181,9 @@ double calculateDE(double **spinMatrix, int i, int j, int L){
 
 void metropolisAlgorithm(int numprocs, double T, double& E, double& M, double& E2, double& M2, double& cv, double& chi, int L, int N, double J, double** spinMatrix, string filename){
 	// Write to file
-	//ofstream myfile; 						//COMMENT
+	//ofstream myfile; 						
 	//myfile.open(filename.c_str());
-	//myfile.open("accepted_T1_2.dat");			//COMMENT
+	//myfile.open("expect_ordered2_T2.40.dat");			
 	// Calculate current energy
 	double energy = calculateEnergy(L,J,spinMatrix);
 	double magnetization = calculateMagnetization(L, spinMatrix); //, E2, M2;
@@ -249,16 +238,15 @@ void metropolisAlgorithm(int numprocs, double T, double& E, double& M, double& E
 	E2 = eSquaredSum;
 	M2 = mSquaredSum;
 
-	//normalize(numprocs,T,L,N,E,E2,M,M2,cv,chi);
 
-	//myfile.close();			// COMMENT!
+	//myfile.close();		
 }
 
 void printResults(double L, double T, double N, double energy, double E2, double M2, double magnetization, double cv, double chi){
 
 //void printResults(double L, double T, double N, double energy, double magnetization, double E2, double M2, double cv, double chi){
 	cout << endl;
-	cout << "After " << N << " loops with temperature " << T <<", the results are:" << endl << endl;
+	cout << "After " << N << " loops with temperature " << T <<" and L = " << L << ", the results are:" << endl << endl;
 	cout << setprecision(5) << "  o  Mean energy:               " << energy << endl;
 	cout << setprecision(5) << "  o  Mean magnetization:        " << magnetization << endl;
 	cout << setprecision(5) << "  o  Heat capacity:             " << cv << endl;
@@ -281,10 +269,4 @@ void normalize(int numprocs, double T, int L, int N, double& E, double& E2, doub
 	M /= L*L;
 	M2 /= L*L; 	
 
-/*	cout << setprecision(5) << "  o  Mean energy:               " << E << endl;
-	cout << setprecision(5) << "  o  Mean magnetization:        " << M << endl;
-	cout << setprecision(5) << "  o  Heat capacity:             " << cv << endl;
-	cout << setprecision(5) << "  o  Magnetic susceptibility    " << chi << endl << endl;
-	cout << setprecision(6) << "  o  Mean energy squared        " << E2 << endl;
-	cout << setprecision(6) << "  o  Mean magnetization squared " << M2 << endl;*/
 }
