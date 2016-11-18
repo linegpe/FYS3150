@@ -61,7 +61,7 @@ fig2.yaxis.tick_right()
 #plt.ylabel(r"$\langle E\rangle /L^2$",fontsize=15)
 #plt.xlabel("Number of Monte Carlo cycles",fontsize=15)
 plt.legend()
-#plt.axis([0,8e6,-2.5,-0.5])
+plt.axis([0,50000,-2,-0.4])
 plt.show()
 
 
