@@ -64,7 +64,7 @@ plt.show()
 
 # N = 500
 
-alpha05lambda0gamma0 = np.loadtxt("alpha05lambda0gamma0.dat")
+alpha05lambda0gamma1 = np.loadtxt("alpha05lambda0gamma0.dat")
 alpha1lambda0gamma0 = np.loadtxt("alpha1lambda0gamma0.dat")
 alpha15lambda0gamma0 = np.loadtxt("alpha15lambda0gamma0.dat")
 alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
@@ -178,4 +178,74 @@ plt.legend()
 
 plt.show()
 
-#----
+
+
+
+# N = 1000, alpha = 1, gamma = 0.0, 1.0, 2.0, 3.0, 4.0
+
+# lambda = 0
+alpha1lambda0gamma0 = np.loadtxt("alpha1lambda0gamma0.dat")
+alpha1lambda0gamma1 = np.loadtxt("alpha1lambda0gamma1.dat")
+alpha1lambda0gamma2 = np.loadtxt("alpha1lambda0gamma2.dat")
+alpha1lambda0gamma3 = np.loadtxt("alpha1lambda0gamma3.dat")
+alpha1lambda0gamma4 = np.loadtxt("alpha1lambda0gamma4.dat")
+
+# lambda = 0.5
+alpha1lambda0gamma0 = np.loadtxt("alpha1lambda0gamma0.dat")
+alpha1lambda0gamma1 = np.loadtxt("alpha1lambda0gamma1.dat")
+alpha1lambda0gamma2 = np.loadtxt("alpha1lambda0gamma2.dat")
+alpha1lambda0gamma3 = np.loadtxt("alpha1lambda0gamma3.dat")
+alpha1lambda0gamma4 = np.loadtxt("alpha1lambda0gamma4.dat")
+
+# N = 1000, alpha = 2, gamma = 0.0, 1.0, 2.0, 3.0, 4.0
+
+#lamba = 0
+alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
+alpha2lambda0gamma1 = np.loadtxt("alpha2lambda0gamma1.dat")
+alpha2lambda0gamma2 = np.loadtxt("alpha2lambda0gamma2.dat")
+alpha2lambda0gamma3 = np.loadtxt("alpha2lambda0gamma3.dat")
+alpha2lambda0gamma4 = np.loadtxt("alpha2lambda0gamma4.dat")
+
+#lamba = 0.5
+alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
+alpha2lambda0gamma1 = np.loadtxt("alpha2lambda0gamma1.dat")
+alpha2lambda0gamma2 = np.loadtxt("alpha2lambda0gamma2.dat")
+alpha2lambda0gamma3 = np.loadtxt("alpha2lambda0gamma3.dat")
+alpha2lambda0gamma4 = np.loadtxt("alpha2lambda0gamma4.dat")
+
+
+# Plotting alpha = 1: 
+
+a1l0g0_counts, a1l0g0_edges = np.histogram(alpha1lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a1l0g0_bin_centers = (a1l0g0_edges[:-1] + a1l0g0_edges[:1])/2.0
+
+a1l0g1_counts, a1l0g1_edges = np.histogram(alpha1lambda0gamma1,50,normed=True) #alpha0lambda025[::-1]
+a1l0g1_bin_centers = (a1l0g1_edges[:-1] + a1l0g1_edges[:1])/2.0
+
+a1l0g2_counts, a1l0g2_edges = np.histogram(alpha1lambda0gamma2,50,normed=True) #alpha0lambda025[::-1]
+a1l0g2_bin_centers = (a1l0g2_edges[:-1] + a1l0g2_edges[:1])/2.0
+
+a1l0g3_counts, a1l0g3_edges = np.histogram(alpha1lambda0gamma3,50,normed=True) #alpha0lambda025[::-1]
+a1l0g3_bin_centers = (a1l0g3_edges[:-1] + a1l0g3_edges[:1])/2.0
+
+a1l0g4_counts, a1l0g4_edges = np.histogram(alpha1lambda0gamma4,50,normed=True) #alpha0lambda025[::-1]
+a1l0g4_bin_centers = (a1l0g4_edges[:-1] + a1l0g4_edges[:1])/2.0
+
+# Plotting alpha = 2: 
+
+a2l0g0_counts, a2l0g0_edges = np.histogram(alpha2lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a2l0g0_bin_centers = (a2l0g0_edges[:-1] + a2l0g0_edges[:1])/2.0
+
+a2l0g1_counts, a2l0g1_edges = np.histogram(alpha2lambda0gamma1,50,normed=True) #alpha0lambda025[::-1]
+a2l0g1_bin_centers = (a2l0g1_edges[:-1] + a2l0g1_edges[:1])/2.0
+
+a2l0g2_counts, a2l0g2_edges = np.histogram(alpha2lambda0gamma2,50,normed=True) #alpha0lambda025[::-1]
+a2l0g2_bin_centers = (a2l0g2_edges[:-1] + a2l0g2_edges[:1])/2.0
+
+a2l0g3_counts, a2l0g3_edges = np.histogram(alpha2lambda0gamma3,50,normed=True) #alpha0lambda025[::-1]
+a2l0g3_bin_centers = (a2l0g3_edges[:-1] + a2l0g3_edges[:1])/2.0
+
+a2l0g4_counts, a2l0g4_edges = np.histogram(alpha2lambda0gamma4,50,normed=True) #alpha0lambda025[::-1]
+a2l0g4_bin_centers = (a2l0g4_edges[:-1] + a2l0g4_edges[:1])/2.0
+
+
