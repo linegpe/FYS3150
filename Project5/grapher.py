@@ -62,12 +62,19 @@ plt.legend()
 
 plt.show()
 
+# N = 500
 
 alpha05lambda0gamma0 = np.loadtxt("alpha05lambda0gamma0.dat")
 alpha1lambda0gamma0 = np.loadtxt("alpha1lambda0gamma0.dat")
 alpha15lambda0gamma0 = np.loadtxt("alpha15lambda0gamma0.dat")
 alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
 
+# New fre 16.12
+alpha05lambda05gamma0 = np.loadtxt("alpha05lambda05gamma0.dat")
+alpha1lambda05gamma0 = np.loadtxt("alpha1lambda05gamma0.dat")
+alpha15lambda05gamma0 = np.loadtxt("alpha15lambda05gamma0.dat")
+alpha2lambda05gamma0 = np.loadtxt("alpha2lambda05gamma0.dat")
+#---
 
 a05l0g0_counts, a05l0g0_edges = np.histogram(alpha05lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
 a05l0g0_bin_centers = (a05l0g0_edges[:-1] + a05l0g0_edges[:1])/2.0
@@ -81,6 +88,20 @@ a15l0g0_bin_centers = (a15l0g0_edges[:-1] + a15l0g0_edges[:1])/2.0
 a2l0g0_counts, a2l0g0_edges = np.histogram(alpha2lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
 a2l0g0_bin_centers = (a2l0g0_edges[:-1] + a2l0g0_edges[:1])/2.0
 
+#New fre 16.14
+a05l05g0_counts, a05l05g0_edges = np.histogram(alpha05lambda05gamma0,50,normed=True) #alpha0lambda025[::-1]
+a05l05g0_bin_centers = (a05l05g0_edges[:-1] + a05l05g0_edges[:1])/2.0
+
+a1l05g0_counts, a1l05g0_edges = np.histogram(alpha1lambda05gamma0,50,normed=True) #alpha0lambda025[::-1]
+a1l05g0_bin_centers = (a1l05g0_edges[:-1] + a1l05g0_edges[:1])/2.0
+
+a15l05g0_counts, a15l05g0_edges = np.histogram(alpha15lambda05gamma0,50,normed=True) #alpha0lambda025[::-1]
+a15l05g0_bin_centers = (a15l05g0_edges[:-1] + a15l05g0_edges[:1])/2.0
+
+a2l05g0_counts, a2l05g0_edges = np.histogram(alpha2lambda05gamma0,50,normed=True) #alpha0lambda025[::-1]
+a2l05g0_bin_centers = (a2l05g0_edges[:-1] + a2l05g0_edges[:1])/2.0
+#---
+
 plt.plot(np.log(a05l0g0_bin_centers), np.log(a05l0g0_counts),'-',label="alpha=0.5")
 plt.plot(np.log(a1l0g0_bin_centers), np.log(a1l0g0_counts),'-',label="alpha=1.0")
 plt.plot(np.log(a15l0g0_bin_centers), np.log(a15l0g0_counts),'-',label="alpha=1.5")
@@ -88,3 +109,73 @@ plt.plot(np.log(a2l0g0_bin_centers), np.log(a2l0g0_counts),'-',label="alpha=2.0"
 plt.legend()
 
 plt.show()
+
+
+# Ny fre 16.19
+plt.plot(np.log(a05l05g0_bin_centers), np.log(a05l05g0_counts),'-',label="alpha=0.5")
+plt.plot(np.log(a1l05g0_bin_centers), np.log(a1l05g0_counts),'-',label="alpha=1.0")
+plt.plot(np.log(a15l05g0_bin_centers), np.log(a15l05g0_counts),'-',label="alpha=1.5")
+plt.plot(np.log(a2l05g0_bin_centers), np.log(a2l05g0_counts),'-',label="alpha=2.0")
+plt.legend()
+
+plt.show()
+
+#----
+
+
+# N = 1000
+
+
+alpha05lambda0gamma0N1000 = np.loadtxt("alpha05lambda0gamma0N1000.dat")
+alpha1lambda0gamma0N1000 = np.loadtxt("alpha1lambda0gamma0N1000.dat")
+alpha15lambda0gamma0N1000 = np.loadtxt("alpha15lambda0gamma0N1000.dat")
+alpha2lambda0gamma0N1000 = np.loadtxt("alpha2lambda0gamma0N1000.dat")
+
+alpha05lambda05gamma0N1000 = np.loadtxt("alpha05lambda05gamma0N1000.dat")
+alpha1lambda05gamma0N1000 = np.loadtxt("alpha1lambda05gamma0N1000.dat")
+alpha15lambda05gamma0N1000 = np.loadtxt("alpha15lambda05gamma0N1000.dat")
+alpha2lambda05gamma0N1000 = np.loadtxt("alpha2lambda05gamma0N1000.dat")
+
+
+a05l0g0N1000_counts, a05l0g0N1000_edges = np.histogram(alpha05lambda0gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a05l0g0N1000_bin_centers = (a05l0g0N1000_edges[:-1] + a05l0g0N1000_edges[:1])/2.0
+
+a1l0g0N1000_counts, a1l0g0N1000_edges = np.histogram(alpha1lambda0gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a1l0g0N1000_bin_centers = (a1l0g0N1000_edges[:-1] + a1l0g0N1000_edges[:1])/2.0
+
+a15l0g0N1000_counts, a15l0g0N1000_edges = np.histogram(alpha15lambda0gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a15l0g0N1000_bin_centers = (a15l0g0N1000_edges[:-1] + a15l0g0N1000_edges[:1])/2.0
+
+a2l0g0N1000_counts, a2l0g0N1000_edges = np.histogram(alpha2lambda0gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a2l0g0N1000_bin_centers = (a2l0g0N1000_edges[:-1] + a2l0g0N1000_edges[:1])/2.0
+
+a05l05g0N1000_counts, a05l05g0N1000_edges = np.histogram(alpha05lambda05gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a05l05g0N1000_bin_centers = (a05l05g0N1000_edges[:-1] + a05l05g0N1000_edges[:1])/2.0
+
+a1l05g0N1000_counts, a1l05g0N1000_edges = np.histogram(alpha1lambda05gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a1l05g0N1000_bin_centers = (a1l05g0N1000_edges[:-1] + a1l05g0N1000_edges[:1])/2.0
+
+a15l05g0N1000_counts, a15l05g0N1000_edges = np.histogram(alpha15lambda05gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a15l05g0N1000_bin_centers = (a15l05g0N1000_edges[:-1] + a15l05g0N1000_edges[:1])/2.0
+
+a2l05g0N1000_counts, a2l05g0N1000_edges = np.histogram(alpha2lambda05gamma0N1000,50,normed=True) #alpha0lambda025[::-1]
+a2l05g0N1000_bin_centers = (a2l05g0N1000_edges[:-1] + a2l05g0N1000_edges[:1])/2.0
+
+plt.plot(np.log(a05l0g0N1000_bin_centers), np.log(a05l0g0N1000_counts),'-',label="alpha=0.5")
+plt.plot(np.log(a1l0g0N1000_bin_centers), np.log(a1l0g0N1000_counts),'-',label="alpha=1.0")
+plt.plot(np.log(a15l0g0N1000_bin_centers), np.log(a15l0g0N1000_counts),'-',label="alpha=1.5")
+plt.plot(np.log(a2l0g0N1000_bin_centers), np.log(a2l0g0N1000_counts),'-',label="alpha=2.0")
+plt.legend()
+
+plt.show()
+
+
+plt.plot(np.log(a05l05g0N1000_bin_centers), np.log(a05l05g0N1000_counts),'-',label="alpha=0.5")
+plt.plot(np.log(a1l05g0N1000_bin_centers), np.log(a1l05g0N1000_counts),'-',label="alpha=1.0")
+plt.plot(np.log(a15l05g0N1000_bin_centers), np.log(a15l05g0N1000_counts),'-',label="alpha=1.5")
+plt.plot(np.log(a2l05g0N1000_bin_centers), np.log(a2l05g0N1000_counts),'-',label="alpha=2.0")
+plt.legend()
+
+plt.show()
+
+#----
