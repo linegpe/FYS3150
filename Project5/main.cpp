@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 		cerr << "Usage: " << argv[0] << " lambda" << " alpha" << " gamma" << endl;
 	}
 
-	int nr_agents = 500; 
+	int nr_agents = 1000; 
 
 	double initial_money = 100;
 
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 double* PerformTransactions(int** transactions, double* money, int nr_agents, double lambda, double gamma, double alpha, int initial_money){
 	// Metropolis algorithm for transactions
 	//int nr_agents = 500;		// Should be 500
-	int nr_transactions = 1e7; 	// Should be at least 10^7
+	int nr_transactions = 8*1e4; 	// Should be at least 10^7
 
 	int completed_transactions = 0;	int completed_simulation = 0; 
 	double probability; int i; int j; 
@@ -78,7 +78,7 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
     uniform_int_distribution<int> intRNG(0, nr_agents-1);
     uniform_real_distribution<double> doubleRNG(0,1);
     ofstream myfile;
-    myfile.open("variance.dat");
+    //myfile.open("variance.dat");
 
 		while (completed_transactions < nr_transactions){
 			// Pick two random agents
@@ -98,33 +98,40 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
 					money[j] = lambda*money[j] + (1.0-epsilon)*(1.0-lambda)*sum_ij;
 					completed_transactions += 1;
 					transactions[i][j] += 1;
+					sum_money(money, nr_agents);
 				}
 			} 
 			double var_sum = 0; 
 			for (int i = 0; i < nr_agents; i++){
 				var_sum += (money[i] - initial_money)*(money[i] - initial_money);
 			}
-			double variance = var_sum/nr_agents;
-			myfile << variance << endl;
-			//cout << var_sum << endl;
-			if (variance > initial_money*initial_money/2){
-				break;
-			}
+			double variance_new = var_sum/nr_agents;
+			//myfile << variance_new << endl;
+			// //cout << var_sum << endl;
+			// if (variance_new > initial_money*initial_money/2){
+			// 	cout << i << endl;
+			// 	cout << variance_old << "   " << variance_new << endl;
+			// 	break;
+			// }
+			// if (completed_transactions > 2){
+			// 	double variance_old = var_sum/nr_agents;
+			// }
 		}
 
 
 		completed_simulation += 1; 
 		sort(money, money + nr_agents);	
-		myfile.close();
+		//myfile.close();
 		return money;
 }
 
 void WriteToFile(double* money, int nr_agents){
 	ofstream myfile;
-	myfile.open("final_money.dat");
+	myfile.open("alpha05lambda0gamma0N1000.dat");
 	for (int i = 0; i < nr_agents; i++){
 		myfile << money[i] << endl;
 	}
+	myfile.close();
 }
 
 void sum_money(double* money,int nr_agents){

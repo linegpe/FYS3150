@@ -21,12 +21,70 @@ plt.legend(fontsize=15)
 plt.show()
 
 # Histogram distribution:
-final_money = np.loadtxt("final_money.dat")
+final_money = np.loadtxt("test.dat")
+#final_money /= 50000
+
 plt.hist(final_money,bins = 100,label="Distibution of money")
 plt.xlabel("Money",fontsize=17)
 plt.ylabel("Number of agents",fontsize=17)
 plt.tick_params(axis='x', labelsize=15)
 plt.tick_params(axis='y', labelsize=15)
 plt.legend(fontsize=15)
+plt.show()
+
+counts,bin_edges = np.histogram(final_money,50,normed=True)
+bin_centers = (bin_edges[:-1] + bin_edges[1:])/2.0
+
+plt.plot(bin_centers,counts,"--",label="lambda=0.0")
+#plt.show()
+
+alpha0lambda025 = np.loadtxt("alpha0lambda025.dat")
+alpha0lambda05 = np.loadtxt("alpha0lambda05.dat")
+alpha0lambda09 = np.loadtxt("alpha0lambda09.dat")
+
+a0l025_counts, a0l025_edges = np.histogram(alpha0lambda025,50,normed=True) #alpha0lambda025[::-1]
+a0l025_bin_centers = (a0l025_edges[:-1] + a0l025_edges[:1])/2.0
+
+a0l05_counts, a0l05_edges = np.histogram(alpha0lambda05,50,normed=True) #alpha0lambda025[::-1]
+a0l05_bin_centers = (a0l05_edges[:-1] + a0l05_edges[:1])/2.0
+
+a0l09_counts, a0l09_edges = np.histogram(alpha0lambda09,50,normed=True) #alpha0lambda025[::-1]
+a0l09_bin_centers = (a0l09_edges[:-1] + a0l09_edges[:1])/2.0
+
+
+ #a0l05 = alpha0lambda05[::-1]
+ #a0l09 = alpha0lambda09[::-1]
+
+plt.plot(a0l025_bin_centers, a0l025_counts,'--',label="lambda=0.25")
+plt.plot(a0l05_bin_centers, a0l05_counts,'--',label="lambda=0.5")
+plt.plot(a0l09_bin_centers, a0l09_counts,'--',label="lambda=0.9")
+plt.legend()
+
+plt.show()
+
+
+alpha05lambda0gamma0 = np.loadtxt("alpha05lambda0gamma0.dat")
+alpha1lambda0gamma0 = np.loadtxt("alpha1lambda0gamma0.dat")
+alpha15lambda0gamma0 = np.loadtxt("alpha15lambda0gamma0.dat")
+alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
+
+
+a05l0g0_counts, a05l0g0_edges = np.histogram(alpha05lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a05l0g0_bin_centers = (a05l0g0_edges[:-1] + a05l0g0_edges[:1])/2.0
+
+a1l0g0_counts, a1l0g0_edges = np.histogram(alpha1lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a1l0g0_bin_centers = (a1l0g0_edges[:-1] + a1l0g0_edges[:1])/2.0
+
+a15l0g0_counts, a15l0g0_edges = np.histogram(alpha15lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a15l0g0_bin_centers = (a15l0g0_edges[:-1] + a15l0g0_edges[:1])/2.0
+
+a2l0g0_counts, a2l0g0_edges = np.histogram(alpha2lambda0gamma0,50,normed=True) #alpha0lambda025[::-1]
+a2l0g0_bin_centers = (a2l0g0_edges[:-1] + a2l0g0_edges[:1])/2.0
+
+plt.plot(np.log(a05l0g0_bin_centers), np.log(a05l0g0_counts),'-',label="alpha=0.5")
+plt.plot(np.log(a1l0g0_bin_centers), np.log(a1l0g0_counts),'-',label="alpha=1.0")
+plt.plot(np.log(a15l0g0_bin_centers), np.log(a15l0g0_counts),'-',label="alpha=1.5")
+plt.plot(np.log(a2l0g0_bin_centers), np.log(a2l0g0_counts),'-',label="alpha=2.0")
+plt.legend()
 
 plt.show()
