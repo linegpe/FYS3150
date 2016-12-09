@@ -1,5 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
+import scipy.special as sci
 
 # Pareto's distribution:
 N = 50
@@ -32,6 +33,9 @@ final_money = np.loadtxt("test.dat")
 #final_money /= 50000
 
 #import sys; sys.exit("lol - line 32")
+
+
+
 
 
 
@@ -138,7 +142,7 @@ counts,bin_edges = np.histogram(final_money,50,normed=True)
 bin_centers = (bin_edges[:-1] + bin_edges[1:])/2.0
 
 plt.plot(bin_centers,counts,"--",label=r"$\lambda=0.0$")
-#plt.show()
+plt.show()
 
 alpha0lambda025 = np.loadtxt("alpha0lambda025.dat")
 alpha0lambda05 = np.loadtxt("alpha0lambda05.dat")
@@ -153,6 +157,35 @@ a0l05_bin_centers = (a0l05_edges[:-1] + a0l05_edges[1:])/2.0
 
 a0l09_counts, a0l09_edges = np.histogram(alpha0lambda09,50,normed=True) #alpha0lambda025[::-1]
 a0l09_bin_centers = (a0l09_edges[:-1] + a0l09_edges[1:])/2.0
+
+print sci.gamma(2)
+
+plt.show()
+
+NN = 10
+lillem2 = np.linspace(130,180,NN)
+lambda1 = 0.9
+X = np.zeros(NN)
+for i in range(0,NN):
+	X[i] = lillem2[i]/100
+n = 1 + 3*lambda1/(1-lambda1)
+an = np.zeros(NN)
+pofn = np.zeros(NN)
+for i in range(0,NN):
+	an[i] = n**n/sci.gamma(X[i])
+	pofn[i] = an[i] * X[i]**(n-1)*np.exp(-n*X[i])*1e-30
+
+
+
+plt.plot(a0l09_bin_centers, a0l09_counts,'--',label=r"$\lambda=0.9$")
+#plt.plot(bin_centers,counts,"--",label=r"$\lambda=0.0$")
+plt.plot(lillem2,pofn,'ro',label=r"$Theoretical$")
+plt.legend(fontsize=17)
+plt.xlabel("Wealth",fontsize=17)
+plt.ylabel("Distribution",fontsize=17)
+plt.tick_params(axis='x', labelsize=15)
+plt.tick_params(axis='y', labelsize=15)
+plt.show()
 
 
 #plt.plot(a0l09_bin_centers, a0l09_counts,'--',label=r"$\lambda=0.9$")
@@ -181,6 +214,11 @@ alpha2lambda0gamma0 = np.loadtxt("alpha2lambda0gamma0.dat")
 # plt.xlabel("Income [log(m)]",fontsize=15)
 # plt.ylabel("Probability [log(P(m))]",fontsize=15)
 # plt.show()
+
+plt.hist(alpha05lambda0gamma0,50,normed=True)
+#plt.show()
+plt.hist(alpha2lambda0gamma0,50,normed=True)
+#plt.show()
 
 # New fre 16.12
 alpha05lambda05gamma0 = np.loadtxt("alpha05lambda05gamma0.dat")
@@ -231,9 +269,6 @@ plt.tick_params(axis='x', labelsize=15)
 plt.tick_params(axis='y', labelsize=15)
 plt.show()
 
-plt.show()
-
-
 # Ny fre 16.19
 plt.plot(np.log(a05l05g0_bin_centers), np.log(a05l05g0_counts),'-',label=r"$\alpha=0.5$")
 plt.plot(np.log(a1l05g0_bin_centers), np.log(a1l05g0_counts),'-',label=r"$\alpha=1.0$")
@@ -247,7 +282,7 @@ plt.tick_params(axis='x', labelsize=15)
 plt.tick_params(axis='y', labelsize=15)
 plt.show()
 
-plt.show()
+#plt.show()
 
 #----
 
@@ -305,6 +340,17 @@ plt.show()
 
 plt.show()
 
+N2 = 10
+pofm = np.zeros(N2)
+nr_agents = 1000.0
+total_money = 500*100.0*3.2
+T = total_money/nr_agents
+lillem = np.linspace(500,800,N2)
+for i in range(0,N2):
+	pofm[i] = (1.0/T)*np.exp(-lillem[i]/T)
+
+plt.plot(np.log(lillem), np.log(pofm),'ro',label=r"$Theoretical$")
+
 
 plt.plot(np.log(a05l05g0N1000_bin_centers), np.log(a05l05g0N1000_counts),'-',label=r"$\alpha=0.5$")
 plt.plot(np.log(a1l05g0N1000_bin_centers), np.log(a1l05g0N1000_counts),'-',label=r"$\alpha=1.0$")
@@ -320,6 +366,9 @@ plt.tick_params(axis='y', labelsize=15)
 plt.show()
 
 plt.show()
+
+import sys; sys.exit("LOL")
+
 
 
 
@@ -394,13 +443,14 @@ a2l0g3_bin_centers = (a2l0g3_edges[:-1] + a2l0g3_edges[1:])/2.0
 a2l0g4_counts, a2l0g4_edges = np.histogram(alpha2lambda0gamma4,50,normed=True) #alpha0lambda025[::-1]
 a2l0g4_bin_centers = (a2l0g4_edges[:-1] + a2l0g4_edges[1:])/2.0
 
+plt.show()
 
-N2 = 100
+N2 = 10
 pofm = np.zeros(N2)
 nr_agents = 1000.0
-total_money = 500*100.0
+total_money = 500*100.0*10
 T = total_money/nr_agents
-lillem = np.linspace(100,400,N2)
+lillem = np.linspace(500,900,N2)
 for i in range(0,N2):
 	pofm[i] = (1.0/T)*np.exp(-lillem[i]/T)
 
@@ -411,6 +461,7 @@ plt.plot(np.log(a1l0g1_bin_centers), np.log(a1l0g1_counts),'-',label=r"$\gamma=1
 plt.plot(np.log(a1l0g2_bin_centers), np.log(a1l0g2_counts),'-',label=r"$\gamma=2$")
 plt.plot(np.log(a1l0g3_bin_centers), np.log(a1l0g3_counts),'-',label=r"$\gamma=3$")
 plt.plot(np.log(a1l0g4_bin_centers), np.log(a1l0g4_counts),'-',label=r"$\gamma=4$")
+plt.plot(np.log(lillem),np.log(pofm),"ro",label=r"$Theoretical$")
 plt.legend(fontsize=17)
 plt.xlabel("Wealth [log(m)]",fontsize=17)
 plt.ylabel("Probability [log(P(m))]",fontsize=17)
@@ -418,22 +469,26 @@ plt.tick_params(axis='x', labelsize=15)
 plt.tick_params(axis='y', labelsize=15)
 plt.show()
 
-N2 = 100
+#import sys; sys.exit("lol - line 430")
+
+N2 = 10
 pofm = np.zeros(N2)
 nr_agents = 1000.0
-total_money = 500*100.0
+total_money = 500*100.0*3.2
 T = total_money/nr_agents
-lillem = np.linspace(100,400,N2)
+lillem = np.linspace(500,800,N2)
 for i in range(0,N2):
 	pofm[i] = (1.0/T)*np.exp(-lillem[i]/T)
 
-#plt.plot(np.log(lillem),np.log(pofm),"ro")
+
+
 
 plt.plot(np.log(a2l0g0_bin_centers), np.log(a2l0g0_counts),'-',label=r"$\gamma=0$")
 plt.plot(np.log(a2l0g1_bin_centers), np.log(a2l0g1_counts),'-',label=r"$\gamma=1$")
 plt.plot(np.log(a2l0g2_bin_centers), np.log(a2l0g2_counts),'-',label=r"$\gamma=2$")
 plt.plot(np.log(a2l0g3_bin_centers), np.log(a2l0g3_counts),'-',label=r"$\gamma=3$")
 plt.plot(np.log(a2l0g4_bin_centers), np.log(a2l0g4_counts),'-',label=r"$\gamma=4$")
+plt.plot(np.log(lillem),np.log(pofm),"ro",label=r"$Theoretical$")
 plt.legend(fontsize=17)
 plt.xlabel("Wealth [log(m)]",fontsize=17)
 plt.ylabel("Probability [log(P(m))]",fontsize=17)
