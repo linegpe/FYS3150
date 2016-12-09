@@ -21,9 +21,9 @@ int main(int argc, char* argv[]){
 		cerr << "Usage: " << argv[0] << " lambda" << " alpha" << " gamma" << endl;
 	}
 
-	int nr_agents = 1000; 
+	int nr_agents = 500; 
 
-	double initial_money = 100;
+	double initial_money = 2;
 
 
 	// double alpha = 0.5;
@@ -78,7 +78,7 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
     uniform_int_distribution<int> intRNG(0, nr_agents-1);
     uniform_real_distribution<double> doubleRNG(0,1);
     ofstream myfile;
-    //myfile.open("variance.dat");
+    myfile.open("variance_m02.dat");
 
 		while (completed_transactions < nr_transactions){
 			// Pick two random agents
@@ -98,7 +98,7 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
 					money[j] = lambda*money[j] + (1.0-epsilon)*(1.0-lambda)*sum_ij;
 					completed_transactions += 1;
 					transactions[i][j] += 1;
-					sum_money(money, nr_agents);
+					//sum_money(money, nr_agents);
 				}
 			} 
 			double var_sum = 0; 
@@ -106,8 +106,8 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
 				var_sum += (money[i] - initial_money)*(money[i] - initial_money);
 			}
 			double variance_new = var_sum/nr_agents;
-			//myfile << variance_new << endl;
-			// //cout << var_sum << endl;
+			myfile << variance_new << endl;
+			//cout << var_sum << endl;
 			// if (variance_new > initial_money*initial_money/2){
 			// 	cout << i << endl;
 			// 	cout << variance_old << "   " << variance_new << endl;
@@ -121,15 +121,15 @@ double* PerformTransactions(int** transactions, double* money, int nr_agents, do
 
 		completed_simulation += 1; 
 		sort(money, money + nr_agents);	
-		//myfile.close();
+		myfile.close();
 		return money;
 }
 
 void WriteToFile(double* money, int nr_agents){
 	ofstream myfile;
-	myfile.open("alpha05lambda0gamma0N1000.dat");
+	myfile.open("testest.dat");
 	for (int i = 0; i < nr_agents; i++){
-		myfile << money[i] << endl;
+		//myfile << money[i] << endl;
 	}
 	myfile.close();
 }
